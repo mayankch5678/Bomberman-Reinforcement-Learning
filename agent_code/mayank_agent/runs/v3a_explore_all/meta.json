@@ -1,0 +1,25 @@
+{
+  "actions": [
+    "UP",
+    "RIGHT",
+    "DOWN",
+    "LEFT",
+    "WAIT",
+    "BOMB"
+  ],
+  "created": "2026-09-11T15:40:38",
+  "feature_version": 2,
+  "final_epsilon": 0.05,
+  "git_commit": "0f55c1d",
+  "hyperparameters": {
+    "alpha": 0.01,
+    "epsilon_decay": 0.999,
+    "epsilon_end": 0.05,
+    "epsilon_start": 1.0,
+    "gamma": 0.95
+  },
+  "n_features": 21,
+  "rounds_trained": 5000,
+  "run": "dev",
+  "updated": "2026-09-11T15:46:37"
+}

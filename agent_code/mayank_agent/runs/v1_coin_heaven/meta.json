@@ -1,0 +1,28 @@
+{
+  "actions": [
+    "UP",
+    "RIGHT",
+    "DOWN",
+    "LEFT",
+    "WAIT",
+    "BOMB"
+  ],
+  "archived": true,
+  "created": "2026-09-11T14:19:00",
+  "feature_version": 1,
+  "final_epsilon": 0.1395,
+  "git_commit": null,
+  "hyperparameters": {
+    "alpha": 0.01,
+    "epsilon_decay": 0.999,
+    "epsilon_end": 0.05,
+    "epsilon_start": 1.0,
+    "gamma": 0.95
+  },
+  "n_features": 21,
+  "note": "Task 1 agent: bias + wall + coin-direction features only. Cannot be evaluated by feature-version 2 code; see eval_coin-heaven.json for its archived 100-round result.",
+  "rounds_trained": 3969,
+  "run": "v1_coin_heaven",
+  "trained_scenario": "coin-heaven",
+  "updated": "2026-09-11T14:19:00"
+}
