@@ -11,7 +11,6 @@ Implements tabular-style Q-learning on top of a LINEAR function approximator:
 
 import csv
 import os
-import pickle
 import subprocess
 from collections import deque
 from datetime import datetime
@@ -28,7 +27,12 @@ ALPHA = 0.01          # learning rate
 GAMMA = 0.95          # discount factor
 EPSILON_START = 1.0   # exploration at the very beginning
 EPSILON_END = 0.05    # exploration floor
-EPSILON_DECAY = 0.999  # multiplied after every round
+# Multiplied after every round. 0.999 hits the 0.05 floor at round ~2994, which
+# was far too early for the 20000-round runs: the agent spent most of its
+# training greedy. 0.9998 stretches that to round ~14977.
+#   0.999  -- v1 .. v3e
+#   0.9998 -- v4 onwards
+EPSILON_DECAY = 0.9998
 
 # Paid once per step, on top of whatever the events award. It puts a clock on
 # every round: dithering is never free, so any behaviour that makes no progress
@@ -164,9 +168,9 @@ def end_of_round(self, last_game_state, last_action, events):
     self.round_rewards = 0.0
 
     # Save the model next to the log that produced it, and keep meta.json in
-    # step so the archived run is self-describing.
-    with open(model_path(), 'wb') as f:
-        pickle.dump(self.weights, f)
+    # step so the archived run is self-describing. model_path() already ends in
+    # .npy, so np.save writes exactly that name.
+    np.save(model_path(), self.weights)
 
     self.rounds_trained += 1
     self.meta['rounds_trained'] = self.rounds_trained

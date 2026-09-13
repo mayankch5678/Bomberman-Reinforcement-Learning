@@ -9,7 +9,6 @@ Contains:
 
 import json
 import os
-import pickle
 from collections import deque
 
 import numpy as np
@@ -45,7 +44,13 @@ N_FEATURES = 25         # must match state_to_features() below
 # acting and evaluation can never disagree about which model is in play:
 #   an explicit name (evaluate.py --run) > $BOMBERMAN_RUN > DEFAULT_RUN
 #   BOMBERMAN_RUN=v2_crates python main.py play --agents mayank_agent --train 1 ...
-MODEL_FILE = 'model.pt'
+# The weight matrix is a plain float ndarray, so it is stored with np.save and
+# read back with allow_pickle=False -- no object graph, and stable across NumPy
+# versions. np.save appends '.npy' unless the path already ends in it, so the
+# constant carries the extension and every path built from model_path() names
+# the file exactly. callbacks.py, train.py and evaluate.py all go through
+# model_path(), so the three cannot drift apart.
+MODEL_FILE = 'model.npy'
 LOG_FILE = 'training_log.csv'
 META_FILE = 'meta.json'
 RUNS_DIR = 'runs'
@@ -165,13 +170,18 @@ def setup(self):
         self.weights = np.random.rand(len(ACTIONS), N_FEATURES) * 0.01
     else:
         if not os.path.isfile(path):
+            legacy = os.path.join(run_dir(name), 'model.pt')
+            hint = (" That run still has the old pickled model.pt -- convert it "
+                    "with analysis/convert_weights.py."
+                    if os.path.isfile(legacy) else "")
             raise FileNotFoundError(
                 f"no model for run {name!r} at {path}. Set {RUN_ENV_VAR} to an "
-                f"existing run, or train one first."
+                f"existing run, or train one first.{hint}"
             )
         self.logger.info(f"Run {name!r}: loading model from {path}.")
-        with open(path, 'rb') as f:
-            self.weights = pickle.load(f)
+        # allow_pickle=False is the point: a weights file can only ever be a
+        # plain array, never a pickled object graph.
+        self.weights = np.load(path, allow_pickle=False)
         check_compatible(self.weights, read_meta(name), name)
 
 

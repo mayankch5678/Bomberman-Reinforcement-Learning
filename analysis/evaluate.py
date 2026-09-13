@@ -37,7 +37,10 @@ from environment import BombeRLeWorld, WorldArgs
 
 DEFAULT_SEED_BASE = 20240101
 OPPONENT = 'rule_based_agent'
-LEGACY_MODEL = 'model.pt'   # agents that predate the run layout
+# Agents that predate the run layout keep a bare weights file in their own
+# directory. Either format may be present there; the run layout itself is
+# always .npy (see callbacks.MODEL_FILE).
+LEGACY_MODELS = ('model.npy', 'model.pt')
 # The game's action space, used to order the histogram so that an action the
 # agent NEVER picks still shows up as a zero row -- which is the interesting case.
 ALL_ACTIONS = ['UP', 'RIGHT', 'DOWN', 'LEFT', 'WAIT', 'BOMB']
@@ -82,10 +85,13 @@ def resolve_model(agent_name, requested_run):
             raise SystemExit(
                 f"agent {agent_name!r} does not use the run layout, so --run "
                 f"{requested_run!r} means nothing to it")
-        path = os.path.join(REPO_ROOT, 'agent_code', agent_name, LEGACY_MODEL)
-        if os.path.isfile(path):
-            print(f"[evaluate] agent {agent_name!r} has no run layout -> {path}", flush=True)
-            return path, None, {}
+        for candidate in LEGACY_MODELS:
+            path = os.path.join(REPO_ROOT, 'agent_code', agent_name, candidate)
+            if os.path.isfile(path):
+                print(f"[evaluate] agent {agent_name!r} has no run layout -> {path}",
+                      flush=True)
+                return path, None, {}
+        path = os.path.join(REPO_ROOT, 'agent_code', agent_name, LEGACY_MODELS[0])
         # Hand-coded baselines (rule_based_agent, ...) carry no weights at all
         # and are still worth evaluating as a reference row in the report.
         print(f"[evaluate] agent {agent_name!r} has no model file "
