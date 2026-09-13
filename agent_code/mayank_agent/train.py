@@ -21,7 +21,7 @@ import numpy as np
 import events as e
 from .callbacks import (ACTIONS, FEATURE_VERSION, N_FEATURES, announce_run, blast_coords,
                         bfs_distance, crate_approach_tiles, log_path, model_path, read_meta,
-                        run_dir, run_name, state_to_features, write_meta)
+                        run_dir, run_name, state_to_features, viable_bomb_tiles, write_meta)
 
 # --- hyperparameters (these are what you tune for the report) --------------
 ALPHA = 0.01          # learning rate
@@ -34,6 +34,18 @@ EPSILON_DECAY = 0.999  # multiplied after every round
 # every round: dithering is never free, so any behaviour that makes no progress
 # is strictly worse than one that does.
 LIVING_COST = -0.1
+
+# --- reward-regime toggles -------------------------------------------------
+# The v3d experiment changed two things at once. These switches keep both
+# regimes reproducible from the same file instead of one overwriting the other:
+#
+#   v3c, v3e : both False  -- plain WAITED penalty, no bomb-spot shaping
+#   v3d      : both True   -- WAITED free + STALLED -3.0, bomb-spot shaping on
+#
+# The viable-bomb-spot FEATURE ([21:25]) is always present either way; only its
+# shaping is gated here, which is what makes v3e a clean control for v3d.
+USE_BOMB_SPOT_SHAPING = False
+USE_STALL_PENALTY = False
 
 # --- custom events ---------------------------------------------------------
 # Each pair is one axis of behaviour, scored symmetrically (see reward_from_events).
@@ -48,6 +60,13 @@ USELESS_BOMB = 'USELESS_BOMB'              # dropped a bomb that will clear noth
 
 MOVED_TOWARD_CRATE = 'MOVED_TOWARD_CRATE'  # only while no coin is reachable
 MOVED_AWAY_FROM_CRATE = 'MOVED_AWAY_FROM_CRATE'
+
+# A viable bombing tile hits a crate AND leaves an escape. Preferred over the
+# plain crate target, which may be unbombable from anywhere the agent can stand.
+MOVED_TOWARD_BOMB_SPOT = 'MOVED_TOWARD_BOMB_SPOT'
+MOVED_AWAY_FROM_BOMB_SPOT = 'MOVED_AWAY_FROM_BOMB_SPOT'
+
+STALLED = 'STALLED'                        # waited while in no danger at all
 
 
 def git_commit():
@@ -90,6 +109,12 @@ def setup_training(self):
             'alpha': ALPHA, 'gamma': GAMMA,
             'epsilon_start': EPSILON_START, 'epsilon_end': EPSILON_END,
             'epsilon_decay': EPSILON_DECAY,
+        },
+        'reward_regime': {
+            'use_bomb_spot_shaping': USE_BOMB_SPOT_SHAPING,
+            'use_stall_penalty': USE_STALL_PENALTY,
+            'waited': 0.0 if USE_STALL_PENALTY else -1.0,
+            'living_cost': LIVING_COST,
         },
         'git_commit': git_commit(),
         'created': meta.get('created') or datetime.now().isoformat(timespec='seconds'),
@@ -203,16 +228,30 @@ def auxiliary_events(old_state, self_action, new_state, events):
         elif new_d > old_d:
             aux.append(MOVED_AWAY_FROM_COIN)
     else:
-        # Targets are the free tiles NEXT to a crate -- you cannot stand on one.
-        old_c = bfs_distance(old_state['field'], old_pos,
-                             crate_approach_tiles(old_state['field']))
-        new_c = bfs_distance(new_state['field'], new_pos,
-                             crate_approach_tiles(new_state['field']))
-        if old_c is not None and new_c is not None:
-            if new_c < old_c:
-                aux.append(MOVED_TOWARD_CRATE)
-            elif new_c > old_c:
-                aux.append(MOVED_AWAY_FROM_CRATE)
+        # Strict precedence: coin > viable bombing tile > any crate. Exactly one
+        # navigation pair fires per step, so the three never fight each other.
+        old_s = new_s = None
+        if USE_BOMB_SPOT_SHAPING:
+            old_s = bfs_distance(old_state['field'], old_pos,
+                                 viable_bomb_tiles(old_state['field']))
+            new_s = bfs_distance(new_state['field'], new_pos,
+                                 viable_bomb_tiles(new_state['field']))
+        if old_s is not None and new_s is not None:
+            if new_s < old_s:
+                aux.append(MOVED_TOWARD_BOMB_SPOT)
+            elif new_s > old_s:
+                aux.append(MOVED_AWAY_FROM_BOMB_SPOT)
+        else:
+            # Fall back to plain crate proximity when nothing is safely bombable.
+            old_c = bfs_distance(old_state['field'], old_pos,
+                                 crate_approach_tiles(old_state['field']))
+            new_c = bfs_distance(new_state['field'], new_pos,
+                                 crate_approach_tiles(new_state['field']))
+            if old_c is not None and new_c is not None:
+                if new_c < old_c:
+                    aux.append(MOVED_TOWARD_CRATE)
+                elif new_c > old_c:
+                    aux.append(MOVED_AWAY_FROM_CRATE)
 
     # --- stepping out of / into a blast radius -----------------------------
     # Only when I actually changed tile. Dropping a bomb also puts me inside a
@@ -225,6 +264,16 @@ def auxiliary_events(old_state, self_action, new_state, events):
             aux.append(ESCAPED_BLAST)
         elif now_in and not was_in:
             aux.append(MOVED_INTO_BLAST)
+
+    # --- stalling: waited with nothing threatening me ----------------------
+    # Mirrors feature [9]: danger means a ticking blast radius or a live
+    # explosion on my tile. Waiting there can be the only correct move, so it
+    # goes unpunished; waiting anywhere else is pure time-wasting.
+    if USE_STALL_PENALTY and e.WAITED in events:
+        in_danger = (in_blast(old_state, old_pos)
+                     or old_state['explosion_map'][old_pos] > 0)
+        if not in_danger:
+            aux.append(STALLED)
 
     # --- was this bomb worth dropping? -------------------------------------
     if e.BOMB_DROPPED in events:
@@ -264,6 +313,12 @@ def reward_from_events(self, events) -> float:
         MOVED_TOWARD_CRATE: 1.0,
         MOVED_AWAY_FROM_CRATE: -1.5,
 
+        # Same asymmetry, bigger numbers: this target is the one the agent can
+        # actually act on, so it has to outweigh the standing-still habit that
+        # v3c acquired (a WAIT bias of roughly +25).
+        MOVED_TOWARD_BOMB_SPOT: 2.0,
+        MOVED_AWAY_FROM_BOMB_SPOT: -3.0,
+
         ESCAPED_BLAST: 3.0,          # outranks coin-chasing: never walk into fire for a coin
         MOVED_INTO_BLAST: -3.0,
 
@@ -271,7 +326,12 @@ def reward_from_events(self, events) -> float:
         USELESS_BOMB: -2.0,
 
         # --- costs ----------------------------------------------------------
-        e.WAITED: -1.0,
+        # With USE_STALL_PENALTY on, waiting itself is free -- sitting out a
+        # blast behind a corner is often the only survivable move -- and only
+        # STALLED (waiting while nothing threatens me) is punished, hard.
+        # With it off, we are back to v3c's flat penalty on every wait.
+        e.WAITED: 0.0 if USE_STALL_PENALTY else -1.0,
+        STALLED: -3.0,
         e.INVALID_ACTION: -3.0,
         e.BOMB_DROPPED: 0.0,         # was -5 in task 1; the pair above judges bombs now
         e.KILLED_SELF: -50.0,

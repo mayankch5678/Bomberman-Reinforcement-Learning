@@ -1,0 +1,25 @@
+{
+  "actions": [
+    "UP",
+    "RIGHT",
+    "DOWN",
+    "LEFT",
+    "WAIT",
+    "BOMB"
+  ],
+  "created": "2026-09-13T12:37:09",
+  "feature_version": 3,
+  "final_epsilon": 0.301,
+  "git_commit": "3d56df6",
+  "hyperparameters": {
+    "alpha": 0.01,
+    "epsilon_decay": 0.999,
+    "epsilon_end": 0.05,
+    "epsilon_start": 1.0,
+    "gamma": 0.95
+  },
+  "n_features": 25,
+  "rounds_trained": 1200,
+  "run": "v3d_bombspot",
+  "updated": "2026-09-13T12:37:26"
+}

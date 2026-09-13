@@ -29,8 +29,9 @@ DIRECTIONS = ['UP', 'RIGHT', 'DOWN', 'LEFT']
 # setup() refuses anything else rather than silently scoring garbage.
 #   1 -- task 1: bias, walls, coin direction                        (9 features)
 #   2 -- task 2: + danger, neighbour safety, bomb value, crates    (21 features)
-FEATURE_VERSION = 2
-N_FEATURES = 21         # must match state_to_features() below
+#   3 -- v3d:    + direction to the nearest VIABLE bombing tile    (25 features)
+FEATURE_VERSION = 3
+N_FEATURES = 25         # must match state_to_features() below
 
 # --- run layout ------------------------------------------------------------
 # Every training run owns a directory holding its model, its log and its
@@ -139,8 +140,12 @@ FRESH_BOMB_TIMER = s.BOMB_TIMER      # 4 -- effective timer of a bomb dropped th
 
 # Named slots into the feature vector, so code that reads features does not
 # carry magic numbers. See state_to_features() for the full layout.
+IDX_DANGER = 9        # am I standing in a blast radius / live explosion?
 IDX_SAFE = 11         # [11:15] is stepping UP / RIGHT / DOWN / LEFT survivable?
+IDX_BOMB_CRATE = 15   # would a bomb dropped here destroy a crate?
 IDX_BOMB_ESCAPE = 16  # would a bomb dropped here still leave me an escape?
+IDX_CRATE_DIR = 17    # [17:21] direction to the nearest crate
+IDX_SPOT_DIR = 21     # [21:25] direction to the nearest VIABLE bombing tile
 
 
 # --------------------------------------------------------------------------
@@ -232,6 +237,8 @@ def state_to_features(game_state: dict) -> np.ndarray:
       [15]     would dropping a bomb here destroy at least one crate?
       [16]     would dropping a bomb here still leave me a reachable escape tile?
       [17:21]  one-hot: direction to the nearest crate, *only* when no coin is reachable
+      [21:25]  one-hot: direction to the nearest VIABLE bombing tile -- one where
+               a bomb would BOTH hit a crate AND leave an escape. Same gate.
     """
     if game_state is None:
         return np.zeros(N_FEATURES)
@@ -299,13 +306,24 @@ def state_to_features(game_state: dict) -> np.ndarray:
 
     # --- direction to nearest crate, only if no coin is reachable ----------
     if step is None:
-        crate_targets = crate_approach_tiles(field)
-        crate_step = bfs_next_step(field, (x, y), crate_targets)
+        crate_step = bfs_next_step(field, (x, y), crate_approach_tiles(field))
         if crate_step is not None:
             dx, dy = crate_step[0] - x, crate_step[1] - y
             for i, name in enumerate(DIRECTIONS):
                 if MOVES[name] == (dx, dy):
-                    features[17 + i] = 1.0
+                    features[IDX_CRATE_DIR + i] = 1.0
+
+        # --- direction to the nearest tile worth bombing FROM ---------------
+        # The crate direction above points at crates the agent may have no safe
+        # way to bomb; this points only at tiles where a bomb both pays and is
+        # survivable. Goes to zero once the agent is standing on such a tile,
+        # which is exactly when [15] and [16] both switch on.
+        spot_step = bfs_next_step(field, (x, y), viable_bomb_tiles(field))
+        if spot_step is not None:
+            dx, dy = spot_step[0] - x, spot_step[1] - y
+            for i, name in enumerate(DIRECTIONS):
+                if MOVES[name] == (dx, dy):
+                    features[IDX_SPOT_DIR + i] = 1.0
 
     return features
 
@@ -392,6 +410,66 @@ def survivable(field, start, danger, explosion_map, bomb_tiles, horizon, start_m
                 frontier.append((nxt, nd))
 
     return False
+
+
+def _escape_reachable(field, start, blast, budget=s.BOMB_TIMER):
+    """
+    Could I step off `start` onto a tile outside `blast` within `budget` moves?
+
+    A cheaper special case of survivable(): with only a freshly dropped bomb on
+    the board, the sole hazard is `blast`, so waiting can never help and simple
+    breadth-first reachability to depth `budget` settles it.
+    """
+    seen = {start}
+    frontier = deque([(start, 0)])
+    while frontier:
+        (cx, cy), d = frontier.popleft()
+        if d >= budget:
+            continue
+        for nxt in ((cx, cy - 1), (cx + 1, cy), (cx, cy + 1), (cx - 1, cy)):
+            nx, ny = nxt
+            if not (0 <= nx < field.shape[0] and 0 <= ny < field.shape[1]):
+                continue
+            if field[nx, ny] != 0 or nxt == start or nxt in seen:
+                continue          # walls, crates, and the bomb tile itself
+            if nxt not in blast:
+                return True       # made it clear with a move to spare
+            seen.add(nxt)
+            frontier.append((nxt, d + 1))
+    return False
+
+
+# The viable-tile set depends only on the arena, which changes just a few times
+# a round (when crates are destroyed), while state_to_features runs several
+# times per step. Cache on the raw board bytes.
+_VIABLE_CACHE = {}
+_VIABLE_CACHE_MAX = 256
+
+
+def viable_bomb_tiles(field):
+    """
+    Free tiles where dropping a bomb would BOTH destroy at least one crate AND
+    leave a reachable escape -- the positions actually worth walking to.
+    """
+    key = field.tobytes()
+    cached = _VIABLE_CACHE.get(key)
+    if cached is not None:
+        return cached
+
+    tiles = []
+    xs, ys = np.where(field == 0)
+    for x, y in zip(xs, ys):
+        x, y = int(x), int(y)
+        blast = set(blast_coords(field, x, y))
+        if not any(field[t] == 1 for t in blast):
+            continue                                  # nothing to gain
+        if _escape_reachable(field, (x, y), blast):
+            tiles.append((x, y))
+
+    if len(_VIABLE_CACHE) >= _VIABLE_CACHE_MAX:
+        _VIABLE_CACHE.clear()
+    _VIABLE_CACHE[key] = tiles
+    return tiles
 
 
 def crate_approach_tiles(field):
