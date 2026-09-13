@@ -1,0 +1,32 @@
+{
+  "actions": [
+    "UP",
+    "RIGHT",
+    "DOWN",
+    "LEFT",
+    "WAIT",
+    "BOMB"
+  ],
+  "algorithm": "sarsa",
+  "created": "2026-09-13T22:58:31",
+  "feature_version": 3,
+  "final_epsilon": 0.05,
+  "git_commit": "e071d91",
+  "hyperparameters": {
+    "alpha": 0.01,
+    "epsilon_decay": 0.9998,
+    "epsilon_end": 0.05,
+    "epsilon_start": 1.0,
+    "gamma": 0.95
+  },
+  "n_features": 25,
+  "reward_regime": {
+    "living_cost": -0.1,
+    "use_bomb_spot_shaping": false,
+    "use_stall_penalty": false,
+    "waited": -1.0
+  },
+  "rounds_trained": 20000,
+  "run": "sarsa_v1",
+  "updated": "2026-09-13T23:15:33"
+}

@@ -1,0 +1,1835 @@
+{
+  "agent": "mayank_sarsa",
+  "run": "sarsa_v1",
+  "model": "/Users/mayankchoudhary/Downloads/Uni Heidelberg/MLE EXERCISE/finalproject/bomberman_rl/agent_code/mayank_sarsa/runs/sarsa_v1/model.npy",
+  "feature_version": 3,
+  "trained_rounds": 20000,
+  "scenario": "loot-crate",
+  "opponents": 0,
+  "seed_base": 20240101,
+  "summary": {
+    "n_rounds": 200,
+    "mean_score": 30.33,
+    "sem_score": 0.9487921440775724,
+    "mean_coins": 30.33,
+    "sem_coins": 0.9487921440775724,
+    "mean_steps": 400.0,
+    "sem_steps": 0.0,
+    "suicide_rate": 0.0,
+    "sem_suicide_rate": 0.0,
+    "invalid_action_rate": 0.0,
+    "sem_invalid_action_rate": 0.0,
+    "pooled_invalid_action_rate": 0.0,
+    "total_steps": 80000,
+    "action_counts": {
+      "LEFT": 20205,
+      "BOMB": 6133,
+      "RIGHT": 19895,
+      "DOWN": 15073,
+      "WAIT": 3773,
+      "UP": 14921
+    }
+  },
+  "rounds": [
+    {
+      "seed": 20240101,
+      "score": 28,
+      "coins": 28,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240102,
+      "score": 18,
+      "coins": 18,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240103,
+      "score": 19,
+      "coins": 19,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240104,
+      "score": 19,
+      "coins": 19,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240105,
+      "score": 48,
+      "coins": 48,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240106,
+      "score": 31,
+      "coins": 31,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240107,
+      "score": 49,
+      "coins": 49,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240108,
+      "score": 21,
+      "coins": 21,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240109,
+      "score": 44,
+      "coins": 44,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240110,
+      "score": 46,
+      "coins": 46,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240111,
+      "score": 33,
+      "coins": 33,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240112,
+      "score": 42,
+      "coins": 42,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240113,
+      "score": 41,
+      "coins": 41,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240114,
+      "score": 27,
+      "coins": 27,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240115,
+      "score": 40,
+      "coins": 40,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240116,
+      "score": 39,
+      "coins": 39,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240117,
+      "score": 37,
+      "coins": 37,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240118,
+      "score": 25,
+      "coins": 25,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240119,
+      "score": 43,
+      "coins": 43,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240120,
+      "score": 44,
+      "coins": 44,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240121,
+      "score": 39,
+      "coins": 39,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240122,
+      "score": 19,
+      "coins": 19,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240123,
+      "score": 39,
+      "coins": 39,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240124,
+      "score": 44,
+      "coins": 44,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240125,
+      "score": 15,
+      "coins": 15,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240126,
+      "score": 33,
+      "coins": 33,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240127,
+      "score": 44,
+      "coins": 44,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240128,
+      "score": 41,
+      "coins": 41,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240129,
+      "score": 43,
+      "coins": 43,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240130,
+      "score": 21,
+      "coins": 21,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240131,
+      "score": 40,
+      "coins": 40,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240132,
+      "score": 41,
+      "coins": 41,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240133,
+      "score": 40,
+      "coins": 40,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240134,
+      "score": 38,
+      "coins": 38,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240135,
+      "score": 33,
+      "coins": 33,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240136,
+      "score": 8,
+      "coins": 8,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240137,
+      "score": 42,
+      "coins": 42,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240138,
+      "score": 44,
+      "coins": 44,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240139,
+      "score": 41,
+      "coins": 41,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240140,
+      "score": 45,
+      "coins": 45,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240141,
+      "score": 35,
+      "coins": 35,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240142,
+      "score": 48,
+      "coins": 48,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240143,
+      "score": 39,
+      "coins": 39,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240144,
+      "score": 35,
+      "coins": 35,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240145,
+      "score": 15,
+      "coins": 15,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240146,
+      "score": 27,
+      "coins": 27,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240147,
+      "score": 22,
+      "coins": 22,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240148,
+      "score": 38,
+      "coins": 38,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240149,
+      "score": 42,
+      "coins": 42,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240150,
+      "score": 1,
+      "coins": 1,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240151,
+      "score": 38,
+      "coins": 38,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240152,
+      "score": 42,
+      "coins": 42,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240153,
+      "score": 42,
+      "coins": 42,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240154,
+      "score": 0,
+      "coins": 0,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240155,
+      "score": 22,
+      "coins": 22,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240156,
+      "score": 19,
+      "coins": 19,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240157,
+      "score": 9,
+      "coins": 9,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240158,
+      "score": 38,
+      "coins": 38,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240159,
+      "score": 36,
+      "coins": 36,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240160,
+      "score": 37,
+      "coins": 37,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240161,
+      "score": 4,
+      "coins": 4,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240162,
+      "score": 32,
+      "coins": 32,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240163,
+      "score": 27,
+      "coins": 27,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240164,
+      "score": 16,
+      "coins": 16,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240165,
+      "score": 40,
+      "coins": 40,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240166,
+      "score": 38,
+      "coins": 38,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240167,
+      "score": 48,
+      "coins": 48,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240168,
+      "score": 0,
+      "coins": 0,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240169,
+      "score": 19,
+      "coins": 19,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240170,
+      "score": 25,
+      "coins": 25,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240171,
+      "score": 43,
+      "coins": 43,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240172,
+      "score": 32,
+      "coins": 32,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240173,
+      "score": 31,
+      "coins": 31,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240174,
+      "score": 25,
+      "coins": 25,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240175,
+      "score": 29,
+      "coins": 29,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240176,
+      "score": 37,
+      "coins": 37,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240177,
+      "score": 38,
+      "coins": 38,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240178,
+      "score": 39,
+      "coins": 39,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240179,
+      "score": 38,
+      "coins": 38,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240180,
+      "score": 41,
+      "coins": 41,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240181,
+      "score": 12,
+      "coins": 12,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240182,
+      "score": 35,
+      "coins": 35,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240183,
+      "score": 5,
+      "coins": 5,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240184,
+      "score": 14,
+      "coins": 14,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240185,
+      "score": 39,
+      "coins": 39,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240186,
+      "score": 35,
+      "coins": 35,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240187,
+      "score": 40,
+      "coins": 40,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240188,
+      "score": 4,
+      "coins": 4,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240189,
+      "score": 47,
+      "coins": 47,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240190,
+      "score": 5,
+      "coins": 5,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240191,
+      "score": 31,
+      "coins": 31,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240192,
+      "score": 5,
+      "coins": 5,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240193,
+      "score": 43,
+      "coins": 43,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240194,
+      "score": 41,
+      "coins": 41,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240195,
+      "score": 25,
+      "coins": 25,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240196,
+      "score": 7,
+      "coins": 7,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240197,
+      "score": 40,
+      "coins": 40,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240198,
+      "score": 37,
+      "coins": 37,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240199,
+      "score": 39,
+      "coins": 39,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240200,
+      "score": 17,
+      "coins": 17,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240201,
+      "score": 26,
+      "coins": 26,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240202,
+      "score": 8,
+      "coins": 8,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240203,
+      "score": 37,
+      "coins": 37,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240204,
+      "score": 17,
+      "coins": 17,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240205,
+      "score": 41,
+      "coins": 41,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240206,
+      "score": 19,
+      "coins": 19,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240207,
+      "score": 44,
+      "coins": 44,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240208,
+      "score": 12,
+      "coins": 12,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240209,
+      "score": 44,
+      "coins": 44,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240210,
+      "score": 38,
+      "coins": 38,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240211,
+      "score": 28,
+      "coins": 28,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240212,
+      "score": 2,
+      "coins": 2,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240213,
+      "score": 27,
+      "coins": 27,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240214,
+      "score": 38,
+      "coins": 38,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240215,
+      "score": 23,
+      "coins": 23,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240216,
+      "score": 39,
+      "coins": 39,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240217,
+      "score": 45,
+      "coins": 45,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240218,
+      "score": 41,
+      "coins": 41,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240219,
+      "score": 19,
+      "coins": 19,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240220,
+      "score": 40,
+      "coins": 40,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240221,
+      "score": 10,
+      "coins": 10,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240222,
+      "score": 0,
+      "coins": 0,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240223,
+      "score": 41,
+      "coins": 41,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240224,
+      "score": 12,
+      "coins": 12,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240225,
+      "score": 37,
+      "coins": 37,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240226,
+      "score": 26,
+      "coins": 26,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240227,
+      "score": 46,
+      "coins": 46,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240228,
+      "score": 34,
+      "coins": 34,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240229,
+      "score": 43,
+      "coins": 43,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240230,
+      "score": 39,
+      "coins": 39,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240231,
+      "score": 27,
+      "coins": 27,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240232,
+      "score": 50,
+      "coins": 50,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240233,
+      "score": 46,
+      "coins": 46,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240234,
+      "score": 44,
+      "coins": 44,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240235,
+      "score": 39,
+      "coins": 39,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240236,
+      "score": 22,
+      "coins": 22,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240237,
+      "score": 34,
+      "coins": 34,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240238,
+      "score": 44,
+      "coins": 44,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240239,
+      "score": 46,
+      "coins": 46,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240240,
+      "score": 3,
+      "coins": 3,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240241,
+      "score": 29,
+      "coins": 29,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240242,
+      "score": 47,
+      "coins": 47,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240243,
+      "score": 30,
+      "coins": 30,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240244,
+      "score": 41,
+      "coins": 41,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240245,
+      "score": 15,
+      "coins": 15,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240246,
+      "score": 10,
+      "coins": 10,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240247,
+      "score": 18,
+      "coins": 18,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240248,
+      "score": 15,
+      "coins": 15,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240249,
+      "score": 33,
+      "coins": 33,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240250,
+      "score": 47,
+      "coins": 47,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240251,
+      "score": 29,
+      "coins": 29,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240252,
+      "score": 30,
+      "coins": 30,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240253,
+      "score": 29,
+      "coins": 29,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240254,
+      "score": 12,
+      "coins": 12,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240255,
+      "score": 42,
+      "coins": 42,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240256,
+      "score": 42,
+      "coins": 42,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240257,
+      "score": 27,
+      "coins": 27,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240258,
+      "score": 42,
+      "coins": 42,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240259,
+      "score": 36,
+      "coins": 36,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240260,
+      "score": 38,
+      "coins": 38,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240261,
+      "score": 14,
+      "coins": 14,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240262,
+      "score": 46,
+      "coins": 46,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240263,
+      "score": 10,
+      "coins": 10,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240264,
+      "score": 10,
+      "coins": 10,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240265,
+      "score": 48,
+      "coins": 48,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240266,
+      "score": 26,
+      "coins": 26,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240267,
+      "score": 36,
+      "coins": 36,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240268,
+      "score": 46,
+      "coins": 46,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240269,
+      "score": 5,
+      "coins": 5,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240270,
+      "score": 11,
+      "coins": 11,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240271,
+      "score": 30,
+      "coins": 30,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240272,
+      "score": 19,
+      "coins": 19,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240273,
+      "score": 43,
+      "coins": 43,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240274,
+      "score": 7,
+      "coins": 7,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240275,
+      "score": 0,
+      "coins": 0,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240276,
+      "score": 35,
+      "coins": 35,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240277,
+      "score": 43,
+      "coins": 43,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240278,
+      "score": 40,
+      "coins": 40,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240279,
+      "score": 30,
+      "coins": 30,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240280,
+      "score": 37,
+      "coins": 37,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240281,
+      "score": 40,
+      "coins": 40,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240282,
+      "score": 43,
+      "coins": 43,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240283,
+      "score": 38,
+      "coins": 38,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240284,
+      "score": 37,
+      "coins": 37,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240285,
+      "score": 33,
+      "coins": 33,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240286,
+      "score": 44,
+      "coins": 44,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240287,
+      "score": 10,
+      "coins": 10,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240288,
+      "score": 8,
+      "coins": 8,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240289,
+      "score": 21,
+      "coins": 21,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240290,
+      "score": 43,
+      "coins": 43,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240291,
+      "score": 34,
+      "coins": 34,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240292,
+      "score": 24,
+      "coins": 24,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240293,
+      "score": 10,
+      "coins": 10,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240294,
+      "score": 45,
+      "coins": 45,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240295,
+      "score": 21,
+      "coins": 21,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240296,
+      "score": 41,
+      "coins": 41,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240297,
+      "score": 37,
+      "coins": 37,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240298,
+      "score": 18,
+      "coins": 18,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240299,
+      "score": 8,
+      "coins": 8,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    },
+    {
+      "seed": 20240300,
+      "score": 20,
+      "coins": 20,
+      "steps": 400,
+      "suicide": 0.0,
+      "invalid_rate": 0.0,
+      "invalid": 0
+    }
+  ]
+}
