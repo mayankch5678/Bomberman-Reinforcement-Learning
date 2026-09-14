@@ -490,7 +490,6 @@ def viable_bomb_tiles(field):
     _VIABLE_CACHE[key] = tiles
     return tiles
 
-
 def crate_approach_tiles(field):
     """Free tiles standing next to at least one crate -- i.e. bombing spots."""
     targets = []

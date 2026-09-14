@@ -7,10 +7,11 @@
     "WAIT",
     "BOMB"
   ],
-  "created": "2026-09-13T23:08:26",
+  "algorithm": "sarsa",
+  "created": "2026-09-13T23:39:04",
   "feature_version": 3,
   "final_epsilon": 0.05,
-  "git_commit": "e071d91",
+  "git_commit": "07b4e8d",
   "hyperparameters": {
     "alpha": 0.01,
     "epsilon_decay": 0.9998,
@@ -26,6 +27,6 @@
     "waited": -1.0
   },
   "rounds_trained": 20000,
-  "run": "v5_classic",
-  "updated": "2026-09-13T23:32:41"
+  "run": "sarsa_classic",
+  "updated": "2026-09-14T00:03:25"
 }

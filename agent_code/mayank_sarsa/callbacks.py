@@ -42,7 +42,7 @@ N_FEATURES = 25         # must match state_to_features() below
 #
 # The run name is resolved in exactly one place, resolve_run(), so training,
 # acting and evaluation can never disagree about which model is in play:
-#   an explicit name (evaluate.py --run) > $BOMBERMAN_RUN > DEFAULT_RUN
+#   an explicit name (evaluate.py --run) > $BOMBERMAN_RUN > no run at all
 #   BOMBERMAN_RUN=v2_crates python main.py play --agents mayank_agent --train 1 ...
 # The weight matrix is a plain float ndarray, so it is stored with np.save and
 # read back with allow_pickle=False -- no object graph, and stable across NumPy
@@ -55,7 +55,6 @@ LOG_FILE = 'training_log.csv'
 META_FILE = 'meta.json'
 RUNS_DIR = 'runs'
 RUN_ENV_VAR = 'BOMBERMAN_RUN'
-DEFAULT_RUN = 'dev'
 
 
 def resolve_run(run=None):
@@ -63,9 +62,15 @@ def resolve_run(run=None):
     The single source of truth for which run is active.
 
     Precedence: an explicitly passed name (e.g. evaluate.py --run) beats the
-    BOMBERMAN_RUN environment variable, which beats the default.
+    BOMBERMAN_RUN environment variable, which beats no run at all.
+
+    None means "no run": the model sits directly beside this file, which is the
+    tournament-submission layout -- one agent directory holding callbacks.py,
+    train.py and model.npy, with no runs/ tree. That is deliberately the
+    DEFAULT, so a submitted agent loads its own weights with nothing set in the
+    environment.
     """
-    return run or os.environ.get(RUN_ENV_VAR) or DEFAULT_RUN
+    return run or os.environ.get(RUN_ENV_VAR) or None
 
 
 def run_name(run=None):
@@ -74,7 +79,9 @@ def run_name(run=None):
 
 
 def run_dir(name=None):
-    return os.path.join(os.path.dirname(__file__), RUNS_DIR, resolve_run(name))
+    here = os.path.dirname(os.path.abspath(__file__))
+    run = resolve_run(name)
+    return here if run is None else os.path.join(here, RUNS_DIR, run)
 
 
 def announce_run(source, name=None):
@@ -83,7 +90,8 @@ def announce_run(source, name=None):
     between training and evaluation is visible in the first line of output.
     """
     name = resolve_run(name)
-    print(f"[{source}] run {name!r} -> {model_path(name)}", flush=True)
+    shown = name if name is not None else '<none: agent directory>'
+    print(f"[{source}] run {shown!r} -> {model_path(name)}", flush=True)
     return name
 
 
@@ -174,8 +182,9 @@ def setup(self):
             hint = (" That run still has the old pickled model.pt -- convert it "
                     "with analysis/convert_weights.py."
                     if os.path.isfile(legacy) else "")
+            where = repr(name) if name is not None else 'the agent directory'
             raise FileNotFoundError(
-                f"no model for run {name!r} at {path}. Set {RUN_ENV_VAR} to an "
+                f"no model for {where} at {path}. Set {RUN_ENV_VAR} to an "
                 f"existing run, or train one first.{hint}"
             )
         self.logger.info(f"Run {name!r}: loading model from {path}.")
