@@ -1,0 +1,32 @@
+{
+  "actions": [
+    "UP",
+    "RIGHT",
+    "DOWN",
+    "LEFT",
+    "WAIT",
+    "BOMB"
+  ],
+  "created": "2026-09-15T12:21:39",
+  "feature_version": 6,
+  "final_epsilon": 0.05,
+  "git_commit": "3414ba8",
+  "hyperparameters": {
+    "alpha": 0.01,
+    "epsilon_decay": 0.9999,
+    "epsilon_end": 0.05,
+    "epsilon_start": 1.0,
+    "gamma": 0.95
+  },
+  "n_features": 38,
+  "reward_regime": {
+    "invalid_in_blast": -13.0,
+    "living_cost": -0.1,
+    "use_bomb_spot_shaping": false,
+    "use_stall_penalty": false,
+    "waited": -1.0
+  },
+  "rounds_trained": 40000,
+  "run": "v9b_urgency13",
+  "updated": "2026-09-15T16:40:22"
+}

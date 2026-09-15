@@ -1,3 +1,6 @@
+import os
+import random
+import zlib
 from collections import deque
 from random import shuffle
 
@@ -5,8 +8,44 @@ import numpy as np
 
 import settings as s
 
+# --- LOCAL EVALUATION-HARNESS CHANGE -- NOT PART OF ANY SUBMITTED AGENT ----
+# Upstream, setup() calls a bare np.random.seed() and the tie-breaking shuffles
+# below draw from the unseeded stdlib `random` module. Both reseed from OS
+# entropy once per process, so replaying the same arena seed gave a different
+# game every run: over 100 fixed seeds the KILLED_SELF count of one and the same
+# model swung between 56 and 76, which is wider than the effect sizes we are
+# trying to measure between runs.
+#
+# When OPPONENT_SEED_ENV is set, each opponent seeds a private RNG at the start
+# of every round from (harness seed, round number, its own name), so a rerun of
+# the same seeds reproduces the same games exactly. The name is mixed in so the
+# three opponents still differ from one another; the private Random instance
+# keeps them off the global stream, so nothing the agent under test draws can
+# perturb them. With the variable unset the stock entropy-seeded behaviour is
+# kept, so ordinary `python main.py play` games are unaffected.
+#
+# This file is part of the framework, not of our agent: it is never uploaded,
+# and the tournament runs the graders' own unmodified copy. Its only purpose is
+# to make our own A/B measurements reproducible.
+OPPONENT_SEED_ENV = 'BOMBERMAN_OPPONENT_SEED'
 
-def look_for_targets(free_space, start, targets, logger=None):
+
+def _round_seed(self, round_number):
+    """A stable seed for this opponent in this round, or None to stay random."""
+    base = os.environ.get(OPPONENT_SEED_ENV)
+    if base is None:
+        return None
+    name = getattr(self, 'logger', None)
+    name = name.name if name is not None else 'rule_based_agent'
+    # crc32, not hash(): PYTHONHASHSEED randomises str hashing per process, which
+    # is the very thing this function exists to eliminate. Mixing rather than
+    # adding keeps neighbouring base seeds from producing shifted copies of the
+    # same game.
+    key = f'{int(base)}|{int(round_number)}|{name}'.encode()
+    return zlib.crc32(key) & 0xFFFFFFFF
+
+
+def look_for_targets(free_space, start, targets, logger=None, rng=None):
     """Find direction of closest target that can be reached via free tiles.
 
     Performs a breadth-first search of the reachable free tiles until a target is encountered.
@@ -42,7 +81,7 @@ def look_for_targets(free_space, start, targets, logger=None):
         # Add unexplored free neighboring tiles to the queue in a random order
         x, y = current
         neighbors = [(x, y) for (x, y) in [(x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)] if free_space[x, y]]
-        shuffle(neighbors)
+        (rng.shuffle if rng is not None else shuffle)(neighbors)
         for neighbor in neighbors:
             if neighbor not in parent_dict:
                 frontier.append(neighbor)
@@ -66,7 +105,11 @@ def setup(self):
     file for debugging (see https://docs.python.org/3.7/library/logging.html).
     """
     self.logger.debug('Successfully entered setup code')
-    np.random.seed()
+    # LOCAL HARNESS CHANGE: was a bare np.random.seed(). This agent never draws
+    # from numpy -- every decision it randomises goes through the shuffles below
+    # -- so the call only reseeded the global numpy stream for everyone else in
+    # the process. The private generator is seeded per round in act() instead.
+    self.rng = random.Random()
     # Fixed length FIFO queues to avoid repeating the same actions
     self.bomb_history = deque([], 5)
     self.coordinate_history = deque([], 20)
@@ -95,6 +138,9 @@ def act(self, game_state):
     if game_state["round"] != self.current_round:
         reset_self(self)
         self.current_round = game_state["round"]
+        # LOCAL HARNESS CHANGE: per-round reseeding, see the note at the top.
+        seed = _round_seed(self, game_state["round"])
+        self.rng.seed(seed)        # seed(None) == seed from entropy, i.e. stock
     # Gather information about the game state
     arena = game_state['field']
     _, score, bombs_left, (x, y) = game_state['self']
@@ -137,7 +183,7 @@ def act(self, game_state):
     # Collect basic action proposals in a queue
     # Later on, the last added action that is also valid will be chosen
     action_ideas = ['UP', 'DOWN', 'LEFT', 'RIGHT']
-    shuffle(action_ideas)
+    self.rng.shuffle(action_ideas)
 
     # Compile a list of 'targets' the agent should head towards
     cols = range(1, arena.shape[0] - 1)
@@ -158,7 +204,7 @@ def act(self, game_state):
     if self.ignore_others_timer > 0:
         for o in others:
             free_space[o] = False
-    d = look_for_targets(free_space, (x, y), targets, self.logger)
+    d = look_for_targets(free_space, (x, y), targets, self.logger, rng=self.rng)
     if d == (x, y - 1): action_ideas.append('UP')
     if d == (x, y + 1): action_ideas.append('DOWN')
     if d == (x - 1, y): action_ideas.append('LEFT')

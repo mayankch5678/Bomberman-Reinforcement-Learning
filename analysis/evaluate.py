@@ -37,6 +37,8 @@ from environment import BombeRLeWorld, WorldArgs
 
 DEFAULT_SEED_BASE = 20240101
 OPPONENT = 'rule_based_agent'
+# Must match OPPONENT_SEED_ENV in agent_code/rule_based_agent/callbacks.py.
+OPPONENT_SEED_ENV = 'BOMBERMAN_OPPONENT_SEED'
 # Agents that predate the run layout keep a bare weights file in their own
 # directory. Either format may be present there; the run layout itself is
 # always .npy (see callbacks.MODEL_FILE).
@@ -150,6 +152,12 @@ def run_round(world, agent, seed, trace=None):
     # build_arena() is the only consumer of world.rng at round start, so
     # re-seeding here makes the arena a pure function of `seed`.
     world.rng = np.random.default_rng(seed)
+    # LOCAL HARNESS CHANGE: publish the round's seed so our local copy of
+    # rule_based_agent can seed itself from it (see the note at the top of
+    # agent_code/rule_based_agent/callbacks.py). Without this the arena is
+    # reproducible but the opponents are not, and the same model scores
+    # differently on every rerun of the same seeds.
+    os.environ[OPPONENT_SEED_ENV] = str(seed)
     world.new_round()
 
     log = world.replay['actions'][agent.name]   # the engine records every choice

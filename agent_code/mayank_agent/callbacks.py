@@ -29,8 +29,14 @@ DIRECTIONS = ['UP', 'RIGHT', 'DOWN', 'LEFT']
 #   1 -- task 1: bias, walls, coin direction                        (9 features)
 #   2 -- task 2: + danger, neighbour safety, bomb value, crates    (21 features)
 #   3 -- v3d:    + direction to the nearest VIABLE bombing tile    (25 features)
-FEATURE_VERSION = 3
-N_FEATURES = 25         # must match state_to_features() below
+#   4 -- v6:     + opponent direction / distance / blast overlap   (33 features)
+#                and opponents block the escape-route search
+#   5 -- v7:     + per-direction escape continuation, recomputed     (38 features)
+#                every step against live opponent positions
+#   6 -- v9:     [10] rescaled -- a ticking bomb is near-maximally    (38 features)
+#                urgent at every timer value, not just the last one
+FEATURE_VERSION = 6
+N_FEATURES = 38         # must match state_to_features() below
 
 # --- run layout ------------------------------------------------------------
 # Every training run owns a directory holding its model, its log and its
@@ -151,6 +157,33 @@ def check_compatible(weights, meta, name):
 #   which leaves me BOMB_TIMER moves to get clear.
 FRESH_BOMB_TIMER = s.BOMB_TIMER      # 4 -- effective timer of a bomb dropped this step
 
+# --- urgency floor (version 6) ---------------------------------------------
+# Slot [10] used to be the raw fraction (BOMB_TIMER - t)/BOMB_TIMER, so the four
+# observable timers read 0.25 / 0.50 / 0.75 / 1.00. That understated the first
+# one badly. A bomb grants exactly BOMB_TIMER = 4 moves, and clearing a
+# BOMB_POWER = 3 blast down a straight corridor needs all four: there is no
+# slack anywhere in the window, so t = 3 is as urgent as t = 0.
+#
+# The v7 weights showed the cost of pretending otherwise. [10] carries the
+# largest weight in that model (-61.3 on WAIT), which is what eventually drives
+# the agent out of a blast -- but at 0.25 it is scaled down to about -15, not
+# enough to beat WAIT's structural head start from [0] and [9]. Measured over
+# 100 rounds, 122 of v7's 184 in-blast WAITs happened at exactly urgency 0.25,
+# the one step where waiting costs the escape.
+#
+# Rescaling to [URGENCY_FLOOR, 1.0] rather than flattening to a constant 1.0:
+# a constant would make [10] perfectly collinear with [9] (both 1 in a blast,
+# both 0 outside), leaving the model one direction where it had two. Keeping the
+# ordering costs nothing and preserves the ability to tell a fresh bomb from one
+# about to detonate, which still matters for decisions other than escaping.
+URGENCY_FLOOR = 0.9
+
+
+def urgency(timer):
+    """Slot [10] for a bomb observed with `timer` steps left: near 1.0 always."""
+    raw = (s.BOMB_TIMER - timer) / s.BOMB_TIMER
+    return URGENCY_FLOOR + (1.0 - URGENCY_FLOOR) * raw
+
 # Named slots into the feature vector, so code that reads features does not
 # carry magic numbers. See state_to_features() for the full layout.
 IDX_DANGER = 9        # am I standing in a blast radius / live explosion?
@@ -159,6 +192,27 @@ IDX_BOMB_CRATE = 15   # would a bomb dropped here destroy a crate?
 IDX_BOMB_ESCAPE = 16  # would a bomb dropped here still leave me an escape?
 IDX_CRATE_DIR = 17    # [17:21] direction to the nearest crate
 IDX_SPOT_DIR = 21     # [21:25] direction to the nearest VIABLE bombing tile
+IDX_OPP_DIR = 25      # [25:29] direction to the nearest opponent
+IDX_OPP_DIST = 29     # [29:32] one-hot bucket of the BFS distance to that opponent
+IDX_BOMB_HITS_OPP = 32   # would a bomb dropped here catch an opponent where it stands?
+IDX_ESCAPE_DIR = 33   # [33:37] does stepping UP/RIGHT/DOWN/LEFT continue a live escape?
+IDX_TRAPPED = 37      # in a blast radius AND at least one escape direction exists
+
+# [11:15] answers "is that tile survivable", which is computed once, before the
+# bomb is dropped, and never revisited. [33:37] is the same question asked from
+# the position the agent is actually in, every single step, with the other agents
+# treated as the obstacles they are. That is the difference that matters after a
+# move is refused: the old feature still describes the plan the agent made four
+# steps ago, this one describes the board in front of it now.
+
+# Buckets for the opponent distance. A linear model cannot bend a raw distance
+# into "too close / about right / irrelevant", so the distance is spent as three
+# indicator slots instead. The near edge is one step beyond a bomb's reach
+# (BOMB_POWER = 3), i.e. the range in which an opponent can already be hit; the
+# far edge is roughly where a chase stops being worth planning around.
+OPP_NEAR = 3          # bucket 0: distance <= 3   -- in or at bombing range
+OPP_MID = 7           # bucket 1: 4..7            -- worth closing in on
+N_OPP_DIST_BUCKETS = 3   # bucket 2: >= 8         -- far away
 
 
 # --------------------------------------------------------------------------
@@ -251,13 +305,22 @@ def state_to_features(game_state: dict) -> np.ndarray:
       [1:5]    is the tile UP / RIGHT / DOWN / LEFT of me blocked?  (1 = blocked)
       [5:9]    one-hot: which direction is the first step towards the nearest coin?
       [9]      am I standing in the blast radius of a ticking bomb / live explosion?
-      [10]     how urgent is that danger?  0 = safe, 1 = it goes off after my next move
+      [10]     how urgent is that danger?  0 = safe, otherwise >= URGENCY_FLOOR --
+               with only BOMB_TIMER moves to clear a BOMB_POWER blast there is no
+               slack, so every ticking bomb reads as near-maximally urgent
       [11:15]  for UP / RIGHT / DOWN / LEFT: is stepping there survivable?
       [15]     would dropping a bomb here destroy at least one crate?
       [16]     would dropping a bomb here still leave me a reachable escape tile?
       [17:21]  one-hot: direction to the nearest crate, *only* when no coin is reachable
       [21:25]  one-hot: direction to the nearest VIABLE bombing tile -- one where
                a bomb would BOTH hit a crate AND leave an escape. Same gate.
+      [25:29]  one-hot: direction to the nearest opponent (all zero if none reachable)
+      [29:32]  one-hot: how far that opponent is -- <=3 / 4..7 / >=8 steps
+      [32]     would a bomb dropped here catch an opponent where it now stands?
+      [33:37]  for UP / RIGHT / DOWN / LEFT: does stepping there continue a live
+               escape from the danger on the board, given where opponents stand
+               this step? Recomputed every step, so it refreshes after a refused move.
+      [37]     am I inside a blast radius AND is at least one escape direction open?
     """
     if game_state is None:
         return np.zeros(N_FEATURES)
@@ -267,6 +330,7 @@ def state_to_features(game_state: dict) -> np.ndarray:
     coins = game_state['coins']
     bombs = game_state['bombs']
     explosion_map = game_state['explosion_map']
+    others = other_positions(game_state)
 
     features = np.zeros(N_FEATURES)
     features[0] = 1.0
@@ -294,8 +358,8 @@ def state_to_features(game_state: dict) -> np.ndarray:
         features[9], features[10] = 1.0, 1.0
     elif timer_here is not None:
         features[9] = 1.0
-        # t = BOMB_TIMER-1 (just dropped) -> small; t = 0 (about to go off) -> 1.0
-        features[10] = (s.BOMB_TIMER - timer_here) / s.BOMB_TIMER
+        # Every ticking bomb reads as near-maximally urgent; see URGENCY_FLOOR.
+        features[10] = urgency(timer_here)
 
     # --- is each neighbouring tile survivable? -----------------------------
     for i, name in enumerate(DIRECTIONS):
@@ -323,6 +387,13 @@ def state_to_features(game_state: dict) -> np.ndarray:
                                          bomb_tiles | {(x, y)}, hyp_horizon,
                                          start_move=1) else 0.0
 
+        # Would that bomb catch somebody? Measured against where the opponents
+        # stand right now, which is a lower bound on the real thing -- they get
+        # BOMB_TIMER moves to walk out. It is still the signal that separates a
+        # bomb aimed at a player from one aimed at a crate.
+        blast_set = set(blast)
+        features[IDX_BOMB_HITS_OPP] = 1.0 if any(o in blast_set for o in others) else 0.0
+
     # --- direction to nearest crate, only if no coin is reachable ----------
     if step is None:
         crate_step = bfs_next_step(field, (x, y), crate_approach_tiles(field))
@@ -337,12 +408,43 @@ def state_to_features(game_state: dict) -> np.ndarray:
         # way to bomb; this points only at tiles where a bomb both pays and is
         # survivable. Goes to zero once the agent is standing on such a tile,
         # which is exactly when [15] and [16] both switch on.
-        spot_step = bfs_next_step(field, (x, y), viable_bomb_tiles(field))
+        spot_step = bfs_next_step(field, (x, y), viable_bomb_tiles(field, others))
         if spot_step is not None:
             dx, dy = spot_step[0] - x, spot_step[1] - y
             for i, name in enumerate(DIRECTIONS):
                 if MOVES[name] == (dx, dy):
                     features[IDX_SPOT_DIR + i] = 1.0
+
+    # --- can I still walk out of the danger I am in? -----------------------
+    # Asked fresh every step against live opponent positions. [11:15] answered
+    # this once, for the board as it was before the bomb; after a body plugs the
+    # corridor only this one notices, and only this one can tell the agent to
+    # turn around instead of repeating a move the board keeps refusing.
+    escape = escape_directions(field, (x, y), danger, explosion_map,
+                               bomb_tiles, horizon, occupied=others)
+    for i in range(4):
+        features[IDX_ESCAPE_DIR + i] = escape[i]
+    # In danger, but not yet cornered: the state where walking the right way is
+    # the whole game. Distinct from [9], which says only that I am in a blast.
+    features[IDX_TRAPPED] = 1.0 if (features[IDX_DANGER] and any(escape)) else 0.0
+
+    # --- where is the nearest opponent? ------------------------------------
+    # Both slots are read off one BFS, so the direction and the distance can
+    # never disagree about which opponent is meant. Opponents are targets here,
+    # not obstacles: they sit on free tiles, and a path to one must be allowed
+    # to end on the tile it occupies. (Their blocking role is confined to the
+    # escape-route search, where a body in a corridor is what kills the agent.)
+    opp_goal, _, opp_dist = _bfs(field, (x, y), others)
+    if opp_goal is not None:
+        opp_step = bfs_next_step(field, (x, y), others)
+        if opp_step is not None:
+            dx, dy = opp_step[0] - x, opp_step[1] - y
+            for i, name in enumerate(DIRECTIONS):
+                if MOVES[name] == (dx, dy):
+                    features[IDX_OPP_DIR + i] = 1.0
+
+        bucket = 0 if opp_dist <= OPP_NEAR else (1 if opp_dist <= OPP_MID else 2)
+        features[IDX_OPP_DIST + bucket] = 1.0
 
     return features
 
@@ -396,7 +498,8 @@ def blast_horizon(danger, explosion_map):
     return int(horizon)
 
 
-def survivable(field, start, danger, explosion_map, bomb_tiles, horizon, start_move=0):
+def survivable(field, start, danger, explosion_map, bomb_tiles, horizon, start_move=0,
+               occupied=()):
     """
     Is there ANY sequence of moves from `start` that stays out of every blast
     until all current bombs have finished exploding?
@@ -408,6 +511,7 @@ def survivable(field, start, danger, explosion_map, bomb_tiles, horizon, start_m
     if start_move >= horizon:
         return True
 
+    occupied = set(occupied)
     seen = {(start, start_move)}
     frontier = deque([(start, start_move)])
 
@@ -418,8 +522,9 @@ def survivable(field, start, danger, explosion_map, bomb_tiles, horizon, start_m
             nx, ny = nxt
             if not (0 <= nx < field.shape[0] and 0 <= ny < field.shape[1]):
                 continue
-            if nxt != (cx, cy) and (field[nx, ny] != 0 or nxt in bomb_tiles):
-                continue            # walls, crates and bombs block movement
+            if nxt != (cx, cy) and (field[nx, ny] != 0 or nxt in bomb_tiles
+                                    or nxt in occupied):
+                continue            # walls, crates, bombs and bodies all block
             if lethal_at(nxt, nd, danger, explosion_map):
                 continue
             if nd >= horizon:
@@ -431,14 +536,53 @@ def survivable(field, start, danger, explosion_map, bomb_tiles, horizon, start_m
     return False
 
 
-def _escape_reachable(field, start, blast, budget=s.BOMB_TIMER):
+def escape_directions(field, pos, danger, explosion_map, bomb_tiles, horizon, occupied=()):
+    """
+    For UP/RIGHT/DOWN/LEFT: does stepping there leave a live escape from the
+    danger currently on the board?
+
+    This is survivable() asked once per neighbour, from where the agent stands
+    right now, with the other agents counted as obstacles. It is deliberately
+    recomputed from scratch every step: the whole point is that it answers for
+    the board as it is, so a route that a body has just plugged stops being
+    offered on the very next step rather than four steps later.
+    """
+    out = [0.0, 0.0, 0.0, 0.0]
+    occupied = set(occupied)
+    px, py = pos
+    for i, name in enumerate(DIRECTIONS):
+        dx, dy = MOVES[name]
+        nxt = (px + dx, py + dy)
+        if not (0 <= nxt[0] < field.shape[0] and 0 <= nxt[1] < field.shape[1]):
+            continue
+        if field[nxt] != 0 or nxt in bomb_tiles or nxt in occupied:
+            continue                      # cannot go there at all
+        if lethal_at(nxt, 1, danger, explosion_map):
+            continue                      # stepping there dies immediately
+        if survivable(field, nxt, danger, explosion_map, bomb_tiles, horizon,
+                      start_move=1, occupied=occupied):
+            out[i] = 1.0
+    return out
+
+
+def _escape_reachable(field, start, blast, budget=s.BOMB_TIMER, occupied=()):
     """
     Could I step off `start` onto a tile outside `blast` within `budget` moves?
 
     A cheaper special case of survivable(): with only a freshly dropped bomb on
     the board, the sole hazard is `blast`, so waiting can never help and simple
     breadth-first reachability to depth `budget` settles it.
+
+    `occupied` holds the tiles other agents are standing on. They are not in
+    `field` -- the engine keeps agents out of the arena array -- but they block
+    movement just as a crate does, so an escape route that runs through one does
+    not exist. Counting it would be the dangerous direction of wrong: the agent
+    drops a bomb believing it has an exit and then finds the corridor plugged.
+    An opponent may of course step aside on the very next turn; treating them as
+    solid is the conservative reading, and a bomb not dropped costs far less
+    than a bomb dropped into a dead end.
     """
+    occupied = set(occupied)
     seen = {start}
     frontier = deque([(start, 0)])
     while frontier:
@@ -451,6 +595,8 @@ def _escape_reachable(field, start, blast, budget=s.BOMB_TIMER):
                 continue
             if field[nx, ny] != 0 or nxt == start or nxt in seen:
                 continue          # walls, crates, and the bomb tile itself
+            if nxt in occupied:
+                continue          # another agent is standing there
             if nxt not in blast:
                 return True       # made it clear with a move to spare
             seen.add(nxt)
@@ -458,19 +604,27 @@ def _escape_reachable(field, start, blast, budget=s.BOMB_TIMER):
     return False
 
 
-# The viable-tile set depends only on the arena, which changes just a few times
-# a round (when crates are destroyed), while state_to_features runs several
-# times per step. Cache on the raw board bytes.
+# The viable-tile set depends on the arena, which changes just a few times a
+# round (when crates are destroyed), and -- since version 4 -- on where the
+# other agents stand, which changes every step. state_to_features still runs
+# several times per step, so the cache keeps earning its place within a step
+# even though opponent movement now turns it over between steps. Key on the raw
+# board bytes plus the occupied tiles.
 _VIABLE_CACHE = {}
 _VIABLE_CACHE_MAX = 256
 
 
-def viable_bomb_tiles(field):
+def viable_bomb_tiles(field, occupied=()):
     """
     Free tiles where dropping a bomb would BOTH destroy at least one crate AND
     leave a reachable escape -- the positions actually worth walking to.
+
+    `occupied` holds the tiles other agents stand on. They cannot be bombed
+    FROM (the agent cannot walk onto them) and they do not count as escape
+    route, so both the candidate set and the reachability test skip them.
     """
-    key = field.tobytes()
+    occupied = frozenset(occupied)
+    key = (field.tobytes(), occupied)
     cached = _VIABLE_CACHE.get(key)
     if cached is not None:
         return cached
@@ -479,16 +633,24 @@ def viable_bomb_tiles(field):
     xs, ys = np.where(field == 0)
     for x, y in zip(xs, ys):
         x, y = int(x), int(y)
+        if (x, y) in occupied:
+            continue                                  # cannot stand there
         blast = set(blast_coords(field, x, y))
         if not any(field[t] == 1 for t in blast):
             continue                                  # nothing to gain
-        if _escape_reachable(field, (x, y), blast):
+        if _escape_reachable(field, (x, y), blast, occupied=occupied):
             tiles.append((x, y))
 
     if len(_VIABLE_CACHE) >= _VIABLE_CACHE_MAX:
         _VIABLE_CACHE.clear()
     _VIABLE_CACHE[key] = tiles
     return tiles
+
+
+def other_positions(game_state):
+    """Tiles the other agents currently stand on."""
+    return [tuple(pos) for _, _, _, pos in game_state.get('others', ())]
+
 
 def crate_approach_tiles(field):
     """Free tiles standing next to at least one crate -- i.e. bombing spots."""

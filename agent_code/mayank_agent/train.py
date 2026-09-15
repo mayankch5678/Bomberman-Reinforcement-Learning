@@ -19,8 +19,9 @@ import numpy as np
 
 import events as e
 from .callbacks import (ACTIONS, FEATURE_VERSION, N_FEATURES, announce_run, blast_coords,
-                        bfs_distance, crate_approach_tiles, log_path, model_path, read_meta,
-                        run_dir, run_name, state_to_features, viable_bomb_tiles, write_meta)
+                        bfs_distance, crate_approach_tiles, log_path, model_path,
+                        other_positions, read_meta, run_dir, run_name, state_to_features,
+                        viable_bomb_tiles, write_meta)
 
 # --- hyperparameters (these are what you tune for the report) --------------
 ALPHA = 0.01          # learning rate
@@ -31,8 +32,12 @@ EPSILON_END = 0.05    # exploration floor
 # was far too early for the 20000-round runs: the agent spent most of its
 # training greedy. 0.9998 stretches that to round ~14977.
 #   0.999  -- v1 .. v3e
-#   0.9998 -- v4 onwards
-EPSILON_DECAY = 0.9998
+#   0.9998 -- v4 .. v5_classic (20000 rounds, floor at ~15000, i.e. 75% in)
+#   0.9999 -- v7_escape (40000 rounds, floor at ~29956, i.e. 75% in)
+# Kept at the same three-quarters-of-training proportion as v5_classic, so the
+# longer run buys more exploration rather than just a longer greedy tail:
+# solve 0.05 = decay ** n for n = 0.75 * rounds.
+EPSILON_DECAY = 0.9999
 
 # Paid once per step, on top of whatever the events award. It puts a clock on
 # every round: dithering is never free, so any behaviour that makes no progress
@@ -71,6 +76,23 @@ MOVED_TOWARD_BOMB_SPOT = 'MOVED_TOWARD_BOMB_SPOT'
 MOVED_AWAY_FROM_BOMB_SPOT = 'MOVED_AWAY_FROM_BOMB_SPOT'
 
 STALLED = 'STALLED'                        # waited while in no danger at all
+# A move the board refuses while standing in a blast radius. The engine already
+# reports INVALID_ACTION, but it scores the same whether the agent wasted a step
+# in open ground or burned one of the four it had to get clear. Separating the
+# two is the point: the forensics on v5_classic found that 77-89% of its
+# self-kills contained at least one refused move inside the blast -- every one of
+# them caused by an opponent's body -- and the agent kept re-picking the blocked
+# direction because nothing distinguished it from an ordinary wasted turn.
+INVALID_WHILE_IN_BLAST = 'INVALID_WHILE_IN_BLAST'
+
+# How much that costs, over and above the flat INVALID_ACTION penalty. Settable
+# per process so a sweep can run several arms in parallel from one working tree
+# without editing this file between launches; the value lands in meta.json, so
+# every run records the arm it belongs to.
+#   -15.0 -- v7_escape   (the default, and what v7 was trained with)
+#    -6.0 -- v8_inblast6
+#   -10.0 -- v8_inblast10
+INVALID_IN_BLAST_PENALTY = float(os.environ.get('BOMBERMAN_INBLAST_PENALTY', -15.0))
 
 
 def git_commit():
@@ -115,6 +137,7 @@ def setup_training(self):
             'epsilon_decay': EPSILON_DECAY,
         },
         'reward_regime': {
+            'invalid_in_blast': INVALID_IN_BLAST_PENALTY,
             'use_bomb_spot_shaping': USE_BOMB_SPOT_SHAPING,
             'use_stall_penalty': USE_STALL_PENALTY,
             'waited': 0.0 if USE_STALL_PENALTY else -1.0,
@@ -221,6 +244,12 @@ def auxiliary_events(old_state, self_action, new_state, events):
     old_pos = old_state['self'][3]
     new_pos = new_state['self'][3]
 
+    # --- a refused move while standing in fire -----------------------------
+    # Judged on old_state: that is where the agent was when it chose, and the
+    # blast it was standing in is the one that was about to kill it.
+    if e.INVALID_ACTION in events and in_blast(old_state, tuple(old_pos)):
+        aux.append(INVALID_WHILE_IN_BLAST)
+
     # --- closing in on a coin, or failing that, on a crate -----------------
     # Same mechanism for both; the crate version only takes over once no coin
     # is reachable, which mirrors the gate on the crate-direction feature.
@@ -236,10 +265,15 @@ def auxiliary_events(old_state, self_action, new_state, events):
         # navigation pair fires per step, so the three never fight each other.
         old_s = new_s = None
         if USE_BOMB_SPOT_SHAPING:
+            # Same occupancy-aware tile set the features use, so the shaping
+            # cannot reward walking towards a spot state_to_features has already
+            # ruled out as unescapable.
             old_s = bfs_distance(old_state['field'], old_pos,
-                                 viable_bomb_tiles(old_state['field']))
+                                 viable_bomb_tiles(old_state['field'],
+                                                   other_positions(old_state)))
             new_s = bfs_distance(new_state['field'], new_pos,
-                                 viable_bomb_tiles(new_state['field']))
+                                 viable_bomb_tiles(new_state['field'],
+                                                   other_positions(new_state)))
         if old_s is not None and new_s is not None:
             if new_s < old_s:
                 aux.append(MOVED_TOWARD_BOMB_SPOT)
@@ -337,6 +371,13 @@ def reward_from_events(self, events) -> float:
         e.WAITED: 0.0 if USE_STALL_PENALTY else -1.0,
         STALLED: -3.0,
         e.INVALID_ACTION: -3.0,
+        # Stacks on top of the -3.0 above. Scaled against KILLED_SELF (-50): a
+        # refused move in a blast is not a wasted step, it is a sizeable step
+        # towards dying, and the agent has at most four moves to spend.
+        # Deliberately short of -50 so that trying and being blocked still beats
+        # standing still and burning the timer. The magnitude is the thing being
+        # swept -- at -15 the v7 agent stopped dying but also stopped scoring.
+        INVALID_WHILE_IN_BLAST: INVALID_IN_BLAST_PENALTY,
         e.BOMB_DROPPED: 0.0,         # was -5 in task 1; the pair above judges bombs now
         e.KILLED_SELF: -50.0,
         e.SURVIVED_ROUND: 0.0,
