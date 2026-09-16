@@ -7,10 +7,10 @@
     "WAIT",
     "BOMB"
   ],
-  "created": "2026-09-15T17:26:42",
+  "created": "2026-09-15T17:43:41",
   "feature_version": 6,
-  "final_epsilon": 0.9048,
-  "git_commit": "69111f9",
+  "final_epsilon": 0.05,
+  "git_commit": "0fdfa74",
   "hyperparameters": {
     "buffer_size": 150000,
     "epsilon_decay": 0.9999,
@@ -24,7 +24,7 @@
   },
   "model_class": "HistGradientBoostingRegressor",
   "n_features": 38,
-  "n_refits": 4,
+  "n_refits": 160,
   "reward_regime": {
     "invalid_in_blast": -10.0,
     "living_cost": -0.1,
@@ -32,7 +32,7 @@
     "use_stall_penalty": false,
     "waited": -1.0
   },
-  "rounds_trained": 1000,
-  "run": "gbt_pilot1k",
-  "updated": "2026-09-15T17:27:24"
+  "rounds_trained": 40000,
+  "run": "gbt_v1",
+  "updated": "2026-09-15T22:58:13"
 }

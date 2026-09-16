@@ -1,0 +1,39 @@
+{
+  "actions": [
+    "UP",
+    "RIGHT",
+    "DOWN",
+    "LEFT",
+    "WAIT",
+    "BOMB"
+  ],
+  "checkpoint_of": "gbt_v1",
+  "created": "2026-09-15T17:43:41",
+  "feature_version": 6,
+  "final_epsilon": 0.3679,
+  "git_commit": "0fdfa74",
+  "hyperparameters": {
+    "buffer_size": 150000,
+    "epsilon_decay": 0.9999,
+    "epsilon_end": 0.05,
+    "epsilon_start": 1.0,
+    "gamma": 0.95,
+    "learning_rate": 0.1,
+    "max_iter": 100,
+    "max_leaf_nodes": 31,
+    "refit_every": 250
+  },
+  "model_class": "HistGradientBoostingRegressor",
+  "n_features": 38,
+  "n_refits": 40,
+  "reward_regime": {
+    "invalid_in_blast": -10.0,
+    "living_cost": -0.1,
+    "use_bomb_spot_shaping": false,
+    "use_stall_penalty": false,
+    "waited": -1.0
+  },
+  "rounds_trained": 10000,
+  "run": "gbt_v1_r10000",
+  "updated": "2026-09-15T17:58:14"
+}

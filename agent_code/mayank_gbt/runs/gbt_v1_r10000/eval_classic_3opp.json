@@ -1,0 +1,20 @@
+{
+ "label": "gbt_v1_r10000",
+ "run": "gbt_v1_r10000",
+ "agent": "mayank_gbt",
+ "n_rounds": 200,
+ "mean_score": 3.445,
+ "sem_score": 0.16605041009725732,
+ "mean_coins": 2.77,
+ "killed_self_rate": 0.385,
+ "got_killed_rate": 0.455,
+ "total_steps": 56264,
+ "steps_in_blast": 22496,
+ "waits_in_blast": 2849,
+ "in_blast_wait_frac": 0.12664473684210525,
+ "blast_exposure": 0.39982937579980093,
+ "invalid_total": 257,
+ "invalid_action_rate": 0.004567752026162377,
+ "invalid_in_blast": 95,
+ "invalid_in_blast_rate": 0.004222972972972973
+}

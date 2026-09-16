@@ -1,10 +1,26 @@
-cloudpickle==3.1.2
-joblib==1.6.0
-narwhals==2.26.0
-numpy==2.4.6
-packaging==26.3
-pygame==2.6.1
-scikit-learn==1.9.1
-scipy==1.17.1
-threadpoolctl==3.6.0
-tqdm==4.70.0
+# Intentionally empty: the submitted agent needs nothing this image does not
+# already provide.
+#
+# agent_code/mayank_agent/callbacks.py -- the only file the tournament loads --
+# imports json, os and collections from the standard library, numpy, and the
+# framework's own settings module. Nothing else. train.py adds csv, subprocess
+# and datetime, all standard library, and is never imported at all when the
+# agent runs with self.train = False.
+#
+# The three third-party packages the framework itself uses are numpy, tqdm and
+# pygame, and the tournament Dockerfile already installs all three (numpy via
+# conda, tqdm and pygame via pip). pygame is additionally optional: it is
+# imported through fallbacks.py behind a try/except ModuleNotFoundError, so the
+# game runs headless without it.
+#
+# Pinning versions here would be actively harmful rather than merely redundant.
+# This repository was developed against numpy 2.4.6, which is far newer than the
+# miniconda3 image's stack; that image also carries numba, pytorch and
+# tensorflow, each of which pins a narrow numpy range. Forcing an upgrade to
+# satisfy a requirement the agent does not have could break those packages at
+# import time and take the container down before the agent is ever called.
+#
+# Note for anyone reading the repository rather than the submission: the
+# gradient-boosted sibling agent, agent_code/mayank_gbt, DOES need scikit-learn
+# (and its joblib / scipy / threadpoolctl dependencies). It is deliberately not
+# part of the tournament zip, so that requirement does not belong here.

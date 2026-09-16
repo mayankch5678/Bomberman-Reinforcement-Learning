@@ -46,6 +46,18 @@ from .callbacks import (ACTIONS, FEATURE_VERSION, LEARNING_RATE, MAX_ITER, MAX_L
 BUFFER_SIZE = 150_000
 REFIT_EVERY = 250
 
+# --- checkpoints -------------------------------------------------------------
+# Snapshots so a long run stays informative if it is stopped early, and so the
+# learning curve can be read as "did it plateau?" rather than guessed at. Each
+# checkpoint is written as a COMPLETE run directory of its own --
+# runs/<run>_r10000/{model.joblib,meta.json} -- so it can be evaluated directly
+# with BOMBERMAN_RUN=<run>_r10000 and needs no unpacking or copying.
+#
+# Every value is a multiple of REFIT_EVERY, so a checkpoint always lands on a
+# round where the model was just refitted: the snapshot is the model as it
+# actually stood, never one up to 249 rounds stale.
+CHECKPOINT_ROUNDS = (10_000, 20_000, 30_000, 40_000)
+
 # --- hyperparameters (these are what you tune for the report) --------------
 # No ALPHA here: a boosted forest has no per-step step size. The analogous
 # knob is callbacks.LEARNING_RATE, the boosting shrinkage, applied at fit time.
@@ -241,6 +253,9 @@ def end_of_round(self, last_game_state, last_action, events):
         refit(self)
         save_models(self)
 
+    if self.rounds_trained in CHECKPOINT_ROUNDS:
+        write_checkpoint(self)
+
     self.meta['rounds_trained'] = self.rounds_trained
     self.meta['n_refits'] = self.n_refits
     self.meta['final_epsilon'] = round(self.epsilon, 4)
@@ -330,6 +345,38 @@ def refit(self):
 def save_models(self):
     import joblib
     joblib.dump(self.models, model_path(), compress=3)
+
+
+def write_checkpoint(self):
+    """
+    Freeze the current model as a standalone run directory.
+
+    Deliberately a full run rather than a bare file: meta.json travels with the
+    weights, so a checkpoint carries its own feature version, model class and
+    round count and cannot be misread later. `checkpoint_of` records where it
+    came from; `rounds_trained` is the round it was taken at, not the parent's
+    eventual total.
+    """
+    import copy, joblib
+
+    parent = run_name()
+    name = f"{parent}_r{self.rounds_trained}"
+    target = run_dir(name)
+    os.makedirs(target, exist_ok=True)
+    joblib.dump(self.models, os.path.join(target, os.path.basename(model_path())),
+                compress=3)
+
+    meta = copy.deepcopy(self.meta)
+    meta.update({
+        'run': name,
+        'checkpoint_of': parent,
+        'rounds_trained': self.rounds_trained,
+        'n_refits': self.n_refits,
+        'final_epsilon': round(self.epsilon, 4),
+        'updated': datetime.now().isoformat(timespec='seconds'),
+    })
+    write_meta(meta, name)
+    self.logger.info(f"Checkpoint written: {name} at round {self.rounds_trained}.")
 
 
 # --------------------------------------------------------------------------

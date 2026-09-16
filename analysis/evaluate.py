@@ -142,6 +142,27 @@ def build_world(agent_name, scenario, n_opponents):
     return BombeRLeWorld(args, agents)
 
 
+def placing(my_score, opponent_scores):
+    """
+    Where my agent finished this round.
+
+    Competition ranking: rank 1 means nobody scored higher, so a tie for the
+    lead still counts as rank 1. `won` follows that convention; `outscored_best`
+    is the strict version, requiring a margin over every opponent. The two differ
+    only on ties, which are common at low scores, so both are reported rather
+    than picking one and hiding the ambiguity.
+    """
+    best = max(opponent_scores) if opponent_scores else float('-inf')
+    rank = 1 + sum(1 for s in opponent_scores if s > my_score)
+    return {
+        'rank': rank,
+        'won': 1.0 if rank == 1 else 0.0,
+        'outscored_best': 1.0 if my_score > best else 0.0,
+        'opponent_scores': list(opponent_scores),
+        'best_opponent': None if not opponent_scores else best,
+    }
+
+
 def run_round(world, agent, seed, trace=None):
     """
     Play one round on the arena determined by `seed`; return its stats.
@@ -175,15 +196,24 @@ def run_round(world, agent, seed, trace=None):
     # agent.statistics is reset by start_round(), so these are per-round counts.
     st = agent.statistics
     steps = st['steps']
-    return {
+    # end_round() records 'score' for every agent in world.agents, the dead
+    # included, so the opponents' finals are available here and need no
+    # separate bookkeeping. Our agent was added first, hence agents[1:].
+    opponents = [a.statistics['score'] for a in world.agents if a is not agent]
+    record = {
         'seed': seed,
         'score': st['score'],
         'coins': st['coins'],
+        # EVENT_STAT_MAP (agents.py:31) maps KILLED_OPPONENT -> 'kills', so this
+        # is opponents destroyed by this agent's bombs, per round.
+        'kills': st['kills'],
         'steps': steps,
         'suicide': 1.0 if st['suicides'] > 0 else 0.0,
         'invalid_rate': (st['invalid'] / steps) if steps > 0 else 0.0,
         'invalid': st['invalid'],
     }
+    record.update(placing(st['score'], opponents))
+    return record
 
 
 def mean_sem(values):
@@ -208,9 +238,13 @@ def summarise(rounds):
 
     score_m, score_e = mean_sem(col('score'))
     coins_m, coins_e = mean_sem(col('coins'))
+    kills_m, kills_e = mean_sem([float(k) for k in col('kills')])
     steps_m, steps_e = mean_sem(col('steps'))
     suic_m, suic_e = proportion_sem(col('suicide'))
     inv_m, inv_e = mean_sem(col('invalid_rate'))
+    win_m, win_e = proportion_sem(col('won'))
+    out_m, out_e = proportion_sem(col('outscored_best'))
+    rank_m, rank_e = mean_sem([float(r) for r in col('rank')])
 
     total_steps = sum(col('steps'))
     pooled_invalid = sum(col('invalid')) / total_steps if total_steps else 0.0
@@ -219,8 +253,16 @@ def summarise(rounds):
         'n_rounds': len(rounds),
         'mean_score': score_m, 'sem_score': score_e,
         'mean_coins': coins_m, 'sem_coins': coins_e,
+        'mean_kills': kills_m, 'sem_kills': kills_e,
+        'total_kills': sum(col('kills')),
         'mean_steps': steps_m, 'sem_steps': steps_e,
         'suicide_rate': suic_m, 'sem_suicide_rate': suic_e,
+        # The metric the tournament actually settles on: placing, not points.
+        'win_rate': win_m, 'sem_win_rate': win_e,
+        'outscored_best_rate': out_m, 'sem_outscored_best_rate': out_e,
+        'mean_rank': rank_m, 'sem_mean_rank': rank_e,
+        'rank_histogram': {str(k): col('rank').count(k) for k in (1, 2, 3, 4)},
+        'mean_best_opponent': sum(col('best_opponent')) / len(rounds),
         'invalid_action_rate': inv_m, 'sem_invalid_action_rate': inv_e,
         'pooled_invalid_action_rate': pooled_invalid,
         'total_steps': total_steps,
@@ -315,8 +357,16 @@ def report(summary, agent_name, scenario, n_opponents, seed_base, run=None, meta
     print("-" * 58)
     print(f"{'score':<26}{summary['mean_score']:>12.3f}{summary['sem_score']:>14.3f}")
     print(f"{'coins':<26}{summary['mean_coins']:>12.3f}{summary['sem_coins']:>14.3f}")
+    print(f"{'kills per round':<26}{summary['mean_kills']:>12.3f}{summary['sem_kills']:>14.3f}")
     print(f"{'steps survived':<26}{summary['mean_steps']:>12.3f}{summary['sem_steps']:>14.3f}")
     print(f"{'suicide rate':<26}{summary['suicide_rate']:>12.4f}{summary['sem_suicide_rate']:>14.4f}")
+    print(f"{'win rate (rank 1)':<26}{summary['win_rate']:>12.4f}{summary['sem_win_rate']:>14.4f}")
+    print(f"{'outscored best opponent':<26}{summary['outscored_best_rate']:>12.4f}"
+          f"{summary['sem_outscored_best_rate']:>14.4f}")
+    print(f"{'mean rank (1-4)':<26}{summary['mean_rank']:>12.4f}{summary['sem_mean_rank']:>14.4f}")
+    print(f"{'mean best opponent score':<26}{summary['mean_best_opponent']:>12.4f}{'':>14}")
+    h = summary['rank_histogram']
+    print(f"{'rank histogram':<26}" + "  ".join(f"{k}:{h[k]}" for k in ('1','2','3','4')))
     print(f"{'invalid-action rate':<26}"
           f"{summary['invalid_action_rate']:>12.4f}{summary['sem_invalid_action_rate']:>14.4f}")
     print("-" * 58)

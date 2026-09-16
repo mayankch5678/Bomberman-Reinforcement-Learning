@@ -18,10 +18,11 @@ from datetime import datetime
 import numpy as np
 
 import events as e
-from .callbacks import (ACTIONS, FEATURE_VERSION, N_FEATURES, announce_run, blast_coords,
-                        bfs_distance, crate_approach_tiles, log_path, model_path,
-                        other_positions, read_meta, run_dir, run_name, state_to_features,
-                        viable_bomb_tiles, write_meta)
+from .callbacks import (ACTIONS, FEATURE_VERSION, IDX_BOMB_ESCAPE, IDX_BOMB_HITS_OPP,
+                        IDX_DANGER, N_FEATURES, announce_run, blast_coords, bfs_distance,
+                        crate_approach_tiles, log_path, model_path, other_positions,
+                        read_meta, run_dir, run_name, state_to_features, viable_bomb_tiles,
+                        write_meta)
 
 # --- hyperparameters (these are what you tune for the report) --------------
 ALPHA = 0.01          # learning rate
@@ -56,6 +57,18 @@ LIVING_COST = -0.1
 USE_BOMB_SPOT_SHAPING = False
 USE_STALL_PENALTY = False
 
+# --- offence (v12) -----------------------------------------------------------
+# Up to v9 the agent was rewarded for surviving and for collecting coins, and
+# KILLED_OPPONENT was absent from reward_from_events entirely -- a kill reached
+# the agent only as the engine's +5 flowing into the round score, with nothing
+# teaching it to seek one. That is the wrong emphasis for this game: settings.py
+# pays REWARD_KILL = 5 against REWARD_COIN = 1, and across a tournament those
+# totals simply accumulate, so one kill is worth five coins.
+#
+# Off reproduces v9_urgency's reward table exactly; on adds the three terms
+# below. Overridable so both regimes stay runnable from one file.
+USE_OFFENCE = os.environ.get('BOMBERMAN_OFFENCE', '1') != '0'
+
 # --- custom events ---------------------------------------------------------
 # Each pair is one axis of behaviour, scored symmetrically (see reward_from_events).
 MOVED_TOWARD_COIN = 'MOVED_TOWARD_COIN'
@@ -84,6 +97,11 @@ STALLED = 'STALLED'                        # waited while in no danger at all
 # them caused by an opponent's body -- and the agent kept re-picking the blocked
 # direction because nothing distinguished it from an ordinary wasted turn.
 INVALID_WHILE_IN_BLAST = 'INVALID_WHILE_IN_BLAST'
+
+# --- offensive shaping events ------------------------------------------------
+OFFENSIVE_BOMB = 'OFFENSIVE_BOMB'          # bomb dropped onto an opponent, with an escape
+MOVED_TOWARD_OPPONENT = 'MOVED_TOWARD_OPPONENT'
+MOVED_AWAY_FROM_OPPONENT = 'MOVED_AWAY_FROM_OPPONENT'
 
 # How much that costs, over and above the flat INVALID_ACTION penalty. Settable
 # per process so a sweep can run several arms in parallel from one working tree
@@ -138,6 +156,10 @@ def setup_training(self):
         },
         'reward_regime': {
             'invalid_in_blast': INVALID_IN_BLAST_PENALTY,
+            'use_offence': USE_OFFENCE,
+            'killed_opponent': 30.0 if USE_OFFENCE else 0.0,
+            'offensive_bomb': 8.0 if USE_OFFENCE else 0.0,
+            'opponent_nav': [1.0, -1.5] if USE_OFFENCE else [0.0, 0.0],
             'use_bomb_spot_shaping': USE_BOMB_SPOT_SHAPING,
             'use_stall_penalty': USE_STALL_PENALTY,
             'waited': 0.0 if USE_STALL_PENALTY else -1.0,
@@ -235,6 +257,42 @@ def in_blast(state, pos):
                for (bx, by), _ in state['bombs'])
 
 
+def hunt_events(old_state, new_state, old_pos, new_pos):
+    """
+    The toward/away pair for closing on the nearest opponent.
+
+    Gated on two conditions, both read from the state the agent acted in:
+    a bomb must be available -- walking at someone with nothing to threaten them
+    with is not hunting, it is just walking into danger -- and the agent must not
+    already be standing in a blast, where getting out ranks above everything.
+
+    Distance is the BFS distance to the nearest opponent, the same measure the
+    coin and crate pairs use. The bucketed slots [29:32] would have been the
+    obvious alternative, but a bucket only changes at its 3/7 boundaries, so the
+    pair would stay silent through most of an approach; [25:29] gives a direction
+    rather than a distance and cannot say whether a step closed the gap at all.
+    """
+    if not old_state['self'][2]:                       # no bomb to threaten with
+        return []
+    phi = state_to_features(old_state)
+    if phi[IDX_DANGER]:                                # escaping outranks hunting
+        return []
+
+    old_o = other_positions(old_state)
+    new_o = other_positions(new_state)
+    if not old_o or not new_o:
+        return []
+    old_d = bfs_distance(old_state['field'], old_pos, old_o)
+    new_d = bfs_distance(new_state['field'], new_pos, new_o)
+    if old_d is None or new_d is None:
+        return []
+    if new_d < old_d:
+        return [MOVED_TOWARD_OPPONENT]
+    if new_d > old_d:
+        return [MOVED_AWAY_FROM_OPPONENT]
+    return []
+
+
 def auxiliary_events(old_state, self_action, new_state, events):
     """Derive the shaping events that the engine does not provide itself."""
     if old_state is None or new_state is None:
@@ -290,6 +348,13 @@ def auxiliary_events(old_state, self_action, new_state, events):
                     aux.append(MOVED_TOWARD_CRATE)
                 elif new_c > old_c:
                     aux.append(MOVED_AWAY_FROM_CRATE)
+            elif USE_OFFENCE:
+                # Last tier: nothing left to collect and nothing left to blow
+                # up, which is exactly the endgame where the only points still
+                # on the board are the opponents. Placing it here rather than
+                # higher keeps the promise that at most one navigation pair
+                # fires per step, and stops hunting from competing with coins.
+                aux += hunt_events(old_state, new_state, old_pos, new_pos)
 
     # --- stepping out of / into a blast radius -----------------------------
     # Only when I actually changed tile. Dropping a bomb also puts me inside a
@@ -312,6 +377,17 @@ def auxiliary_events(old_state, self_action, new_state, events):
                      or old_state['explosion_map'][old_pos] > 0)
         if not in_danger:
             aux.append(STALLED)
+
+    # --- a bomb aimed at a player ------------------------------------------
+    # Read off the very slots the policy sees, so the reward cannot disagree
+    # with the features: [32] says this blast covers an opponent where it
+    # stands, [16] says an escape would remain. Both are required -- rewarding
+    # [32] alone would pay for suicide bombing, which the -10 in-blast penalty
+    # and the -50 KILLED_SELF are simultaneously trying to stamp out.
+    if USE_OFFENCE and e.BOMB_DROPPED in events:
+        phi = state_to_features(old_state)
+        if phi[IDX_BOMB_HITS_OPP] and phi[IDX_BOMB_ESCAPE]:
+            aux.append(OFFENSIVE_BOMB)
 
     # --- was this bomb worth dropping? -------------------------------------
     if e.BOMB_DROPPED in events:
@@ -339,6 +415,28 @@ def reward_from_events(self, events) -> float:
         e.COIN_COLLECTED: 10.0,      # the objective; everything else is scaled to this
         e.CRATE_DESTROYED: 3.0,      # instrumental: crates hide the coins
         e.COIN_FOUND: 2.0,           # a crate that actually revealed one
+
+        # The engine pays REWARD_KILL = 5 against REWARD_COIN = 1, so a kill is
+        # worth five coins; at COIN_COLLECTED = 10 that fixes a kill at +50 on
+        # the same scale. +30 is deliberately short of it. The shaped reward is
+        # not the game's score, it is a training signal, and a kill is a rarer
+        # and far riskier event than a coin: pricing it at the full ratio makes
+        # the BOMB row chase kills through blast radii that KILLED_SELF (-50) is
+        # simultaneously punishing, which is how v7 learned to stop scoring.
+        # +30 keeps a kill clearly the biggest prize on the board while leaving
+        # dying strictly worse than killing.
+        e.KILLED_OPPONENT: 30.0 if USE_OFFENCE else 0.0,
+
+        # Down-payment on that kill, paid for the decision rather than the
+        # outcome: this bomb covers an opponent AND leaves an escape. Without it
+        # the +30 arrives four steps late and only by luck, which is precisely
+        # why the agent never learned to hunt.
+        OFFENSIVE_BOMB: 8.0 if USE_OFFENCE else 0.0,
+
+        # Same asymmetry as the crate and bomb-spot pairs, so closing in and
+        # backing off again is strictly loss-making rather than free.
+        MOVED_TOWARD_OPPONENT: 1.0 if USE_OFFENCE else 0.0,
+        MOVED_AWAY_FROM_OPPONENT: -1.5 if USE_OFFENCE else 0.0,
 
         # --- symmetric shaping pairs ---------------------------------------
         MOVED_TOWARD_COIN: 1.0,
