@@ -1,0 +1,3631 @@
+{
+ "agent": "mayank_agent",
+ "run": "v5_classic",
+ "tree": "/private/tmp/claude-501/-Users-mayankchoudhary-Downloads-Uni-Heidelberg-MLE-EXERCISE-finalproject/59b22a7d-0e49-49b6-9e85-75b9501e2503/scratchpad/snap_v3",
+ "feature_version_code": 3,
+ "feature_version_model": 3,
+ "lineup": [
+  "random_agent",
+  "random_agent",
+  "random_agent"
+ ],
+ "scenario": "classic",
+ "seed_base": 20240101,
+ "summary": {
+  "n_rounds": 200,
+  "mean_score": 5.685,
+  "sem_score": 0.17969509351444693,
+  "mean_coins": 5.685,
+  "mean_kills": 0.0,
+  "mean_crates": 72.835,
+  "mean_steps": 399.69,
+  "suicide_rate": 0.0,
+  "death_rate": 0.0,
+  "win_rate": 1.0,
+  "mean_rank": 1.0,
+  "invalid_rate": 0.0,
+  "wall_seconds": 63.94120192527771
+ },
+ "rounds": [
+  {
+   "seed": 20240101,
+   "score": 7,
+   "coins": 7,
+   "kills": 0,
+   "crates": 67,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240102,
+   "score": 4,
+   "coins": 4,
+   "kills": 0,
+   "crates": 87,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240103,
+   "score": 6,
+   "coins": 6,
+   "kills": 0,
+   "crates": 88,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240104,
+   "score": 7,
+   "coins": 7,
+   "kills": 0,
+   "crates": 88,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240105,
+   "score": 8,
+   "coins": 8,
+   "kills": 0,
+   "crates": 81,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240106,
+   "score": 0,
+   "coins": 0,
+   "kills": 0,
+   "crates": 43,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240107,
+   "score": 3,
+   "coins": 3,
+   "kills": 0,
+   "crates": 49,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240108,
+   "score": 9,
+   "coins": 9,
+   "kills": 0,
+   "crates": 101,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240109,
+   "score": 9,
+   "coins": 9,
+   "kills": 0,
+   "crates": 114,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240110,
+   "score": 8,
+   "coins": 8,
+   "kills": 0,
+   "crates": 95,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240111,
+   "score": 9,
+   "coins": 9,
+   "kills": 0,
+   "crates": 103,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240112,
+   "score": 3,
+   "coins": 3,
+   "kills": 0,
+   "crates": 63,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240113,
+   "score": 5,
+   "coins": 5,
+   "kills": 0,
+   "crates": 63,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240114,
+   "score": 7,
+   "coins": 7,
+   "kills": 0,
+   "crates": 88,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240115,
+   "score": 9,
+   "coins": 9,
+   "kills": 0,
+   "crates": 82,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240116,
+   "score": 1,
+   "coins": 1,
+   "kills": 0,
+   "crates": 36,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240117,
+   "score": 9,
+   "coins": 9,
+   "kills": 0,
+   "crates": 101,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240118,
+   "score": 6,
+   "coins": 6,
+   "kills": 0,
+   "crates": 76,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240119,
+   "score": 2,
+   "coins": 2,
+   "kills": 0,
+   "crates": 41,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240120,
+   "score": 9,
+   "coins": 9,
+   "kills": 0,
+   "crates": 91,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240121,
+   "score": 8,
+   "coins": 8,
+   "kills": 0,
+   "crates": 78,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240122,
+   "score": 7,
+   "coins": 7,
+   "kills": 0,
+   "crates": 91,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240123,
+   "score": 7,
+   "coins": 7,
+   "kills": 0,
+   "crates": 100,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240124,
+   "score": 4,
+   "coins": 4,
+   "kills": 0,
+   "crates": 59,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240125,
+   "score": 3,
+   "coins": 3,
+   "kills": 0,
+   "crates": 37,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240126,
+   "score": 4,
+   "coins": 4,
+   "kills": 0,
+   "crates": 63,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240127,
+   "score": 8,
+   "coins": 8,
+   "kills": 0,
+   "crates": 99,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240128,
+   "score": 8,
+   "coins": 8,
+   "kills": 0,
+   "crates": 113,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240129,
+   "score": 5,
+   "coins": 5,
+   "kills": 0,
+   "crates": 55,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240130,
+   "score": 9,
+   "coins": 9,
+   "kills": 0,
+   "crates": 81,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240131,
+   "score": 9,
+   "coins": 9,
+   "kills": 0,
+   "crates": 105,
+   "steps": 372,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240132,
+   "score": 6,
+   "coins": 6,
+   "kills": 0,
+   "crates": 108,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240133,
+   "score": 5,
+   "coins": 5,
+   "kills": 0,
+   "crates": 31,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240134,
+   "score": 6,
+   "coins": 6,
+   "kills": 0,
+   "crates": 95,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240135,
+   "score": 2,
+   "coins": 2,
+   "kills": 0,
+   "crates": 28,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240136,
+   "score": 2,
+   "coins": 2,
+   "kills": 0,
+   "crates": 21,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240137,
+   "score": 3,
+   "coins": 3,
+   "kills": 0,
+   "crates": 48,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240138,
+   "score": 8,
+   "coins": 8,
+   "kills": 0,
+   "crates": 87,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240139,
+   "score": 3,
+   "coins": 3,
+   "kills": 0,
+   "crates": 52,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240140,
+   "score": 5,
+   "coins": 5,
+   "kills": 0,
+   "crates": 52,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240141,
+   "score": 4,
+   "coins": 4,
+   "kills": 0,
+   "crates": 49,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240142,
+   "score": 4,
+   "coins": 4,
+   "kills": 0,
+   "crates": 35,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240143,
+   "score": 3,
+   "coins": 3,
+   "kills": 0,
+   "crates": 45,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240144,
+   "score": 8,
+   "coins": 8,
+   "kills": 0,
+   "crates": 102,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240145,
+   "score": 9,
+   "coins": 9,
+   "kills": 0,
+   "crates": 124,
+   "steps": 391,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240146,
+   "score": 3,
+   "coins": 3,
+   "kills": 0,
+   "crates": 68,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240147,
+   "score": 8,
+   "coins": 8,
+   "kills": 0,
+   "crates": 104,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240148,
+   "score": 5,
+   "coins": 5,
+   "kills": 0,
+   "crates": 78,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240149,
+   "score": 9,
+   "coins": 9,
+   "kills": 0,
+   "crates": 116,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240150,
+   "score": 1,
+   "coins": 1,
+   "kills": 0,
+   "crates": 36,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240151,
+   "score": 6,
+   "coins": 6,
+   "kills": 0,
+   "crates": 45,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240152,
+   "score": 9,
+   "coins": 9,
+   "kills": 0,
+   "crates": 113,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240153,
+   "score": 6,
+   "coins": 6,
+   "kills": 0,
+   "crates": 91,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240154,
+   "score": 9,
+   "coins": 9,
+   "kills": 0,
+   "crates": 96,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240155,
+   "score": 5,
+   "coins": 5,
+   "kills": 0,
+   "crates": 49,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240156,
+   "score": 3,
+   "coins": 3,
+   "kills": 0,
+   "crates": 35,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240157,
+   "score": 5,
+   "coins": 5,
+   "kills": 0,
+   "crates": 50,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240158,
+   "score": 4,
+   "coins": 4,
+   "kills": 0,
+   "crates": 63,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240159,
+   "score": 8,
+   "coins": 8,
+   "kills": 0,
+   "crates": 73,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240160,
+   "score": 6,
+   "coins": 6,
+   "kills": 0,
+   "crates": 65,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240161,
+   "score": 1,
+   "coins": 1,
+   "kills": 0,
+   "crates": 16,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240162,
+   "score": 5,
+   "coins": 5,
+   "kills": 0,
+   "crates": 80,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240163,
+   "score": 1,
+   "coins": 1,
+   "kills": 0,
+   "crates": 44,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240164,
+   "score": 3,
+   "coins": 3,
+   "kills": 0,
+   "crates": 28,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240165,
+   "score": 5,
+   "coins": 5,
+   "kills": 0,
+   "crates": 39,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240166,
+   "score": 9,
+   "coins": 9,
+   "kills": 0,
+   "crates": 97,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240167,
+   "score": 4,
+   "coins": 4,
+   "kills": 0,
+   "crates": 58,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240168,
+   "score": 6,
+   "coins": 6,
+   "kills": 0,
+   "crates": 74,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240169,
+   "score": 5,
+   "coins": 5,
+   "kills": 0,
+   "crates": 82,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240170,
+   "score": 8,
+   "coins": 8,
+   "kills": 0,
+   "crates": 93,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240171,
+   "score": 5,
+   "coins": 5,
+   "kills": 0,
+   "crates": 89,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240172,
+   "score": 7,
+   "coins": 7,
+   "kills": 0,
+   "crates": 102,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240173,
+   "score": 4,
+   "coins": 4,
+   "kills": 0,
+   "crates": 49,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240174,
+   "score": 1,
+   "coins": 1,
+   "kills": 0,
+   "crates": 51,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240175,
+   "score": 7,
+   "coins": 7,
+   "kills": 0,
+   "crates": 75,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240176,
+   "score": 7,
+   "coins": 7,
+   "kills": 0,
+   "crates": 99,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240177,
+   "score": 6,
+   "coins": 6,
+   "kills": 0,
+   "crates": 88,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240178,
+   "score": 3,
+   "coins": 3,
+   "kills": 0,
+   "crates": 89,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    1,
+    0
+   ]
+  },
+  {
+   "seed": 20240179,
+   "score": 7,
+   "coins": 7,
+   "kills": 0,
+   "crates": 74,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240180,
+   "score": 0,
+   "coins": 0,
+   "kills": 0,
+   "crates": 37,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240181,
+   "score": 8,
+   "coins": 8,
+   "kills": 0,
+   "crates": 112,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240182,
+   "score": 7,
+   "coins": 7,
+   "kills": 0,
+   "crates": 72,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240183,
+   "score": 6,
+   "coins": 6,
+   "kills": 0,
+   "crates": 71,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240184,
+   "score": 8,
+   "coins": 8,
+   "kills": 0,
+   "crates": 77,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240185,
+   "score": 2,
+   "coins": 2,
+   "kills": 0,
+   "crates": 31,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240186,
+   "score": 9,
+   "coins": 9,
+   "kills": 0,
+   "crates": 108,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240187,
+   "score": 3,
+   "coins": 3,
+   "kills": 0,
+   "crates": 32,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240188,
+   "score": 7,
+   "coins": 7,
+   "kills": 0,
+   "crates": 94,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240189,
+   "score": 8,
+   "coins": 8,
+   "kills": 0,
+   "crates": 107,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240190,
+   "score": 3,
+   "coins": 3,
+   "kills": 0,
+   "crates": 28,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240191,
+   "score": 8,
+   "coins": 8,
+   "kills": 0,
+   "crates": 85,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240192,
+   "score": 7,
+   "coins": 7,
+   "kills": 0,
+   "crates": 84,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240193,
+   "score": 1,
+   "coins": 1,
+   "kills": 0,
+   "crates": 17,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240194,
+   "score": 5,
+   "coins": 5,
+   "kills": 0,
+   "crates": 70,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240195,
+   "score": 7,
+   "coins": 7,
+   "kills": 0,
+   "crates": 70,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240196,
+   "score": 8,
+   "coins": 8,
+   "kills": 0,
+   "crates": 111,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240197,
+   "score": 8,
+   "coins": 8,
+   "kills": 0,
+   "crates": 98,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240198,
+   "score": 0,
+   "coins": 0,
+   "kills": 0,
+   "crates": 16,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240199,
+   "score": 5,
+   "coins": 5,
+   "kills": 0,
+   "crates": 48,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240200,
+   "score": 2,
+   "coins": 2,
+   "kills": 0,
+   "crates": 69,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240201,
+   "score": 5,
+   "coins": 5,
+   "kills": 0,
+   "crates": 55,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240202,
+   "score": 8,
+   "coins": 8,
+   "kills": 0,
+   "crates": 78,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240203,
+   "score": 1,
+   "coins": 1,
+   "kills": 0,
+   "crates": 51,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240204,
+   "score": 6,
+   "coins": 6,
+   "kills": 0,
+   "crates": 71,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240205,
+   "score": 2,
+   "coins": 2,
+   "kills": 0,
+   "crates": 30,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240206,
+   "score": 7,
+   "coins": 7,
+   "kills": 0,
+   "crates": 94,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    1,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240207,
+   "score": 5,
+   "coins": 5,
+   "kills": 0,
+   "crates": 40,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240208,
+   "score": 8,
+   "coins": 8,
+   "kills": 0,
+   "crates": 101,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240209,
+   "score": 8,
+   "coins": 8,
+   "kills": 0,
+   "crates": 93,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240210,
+   "score": 9,
+   "coins": 9,
+   "kills": 0,
+   "crates": 111,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240211,
+   "score": 8,
+   "coins": 8,
+   "kills": 0,
+   "crates": 98,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240212,
+   "score": 2,
+   "coins": 2,
+   "kills": 0,
+   "crates": 47,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240213,
+   "score": 5,
+   "coins": 5,
+   "kills": 0,
+   "crates": 63,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240214,
+   "score": 9,
+   "coins": 9,
+   "kills": 0,
+   "crates": 118,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240215,
+   "score": 5,
+   "coins": 5,
+   "kills": 0,
+   "crates": 62,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240216,
+   "score": 7,
+   "coins": 7,
+   "kills": 0,
+   "crates": 74,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240217,
+   "score": 4,
+   "coins": 4,
+   "kills": 0,
+   "crates": 38,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240218,
+   "score": 1,
+   "coins": 1,
+   "kills": 0,
+   "crates": 20,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240219,
+   "score": 1,
+   "coins": 1,
+   "kills": 0,
+   "crates": 19,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240220,
+   "score": 7,
+   "coins": 7,
+   "kills": 0,
+   "crates": 78,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240221,
+   "score": 2,
+   "coins": 2,
+   "kills": 0,
+   "crates": 28,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240222,
+   "score": 4,
+   "coins": 4,
+   "kills": 0,
+   "crates": 71,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240223,
+   "score": 6,
+   "coins": 6,
+   "kills": 0,
+   "crates": 92,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240224,
+   "score": 8,
+   "coins": 8,
+   "kills": 0,
+   "crates": 90,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240225,
+   "score": 8,
+   "coins": 8,
+   "kills": 0,
+   "crates": 76,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240226,
+   "score": 3,
+   "coins": 3,
+   "kills": 0,
+   "crates": 64,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240227,
+   "score": 7,
+   "coins": 7,
+   "kills": 0,
+   "crates": 90,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240228,
+   "score": 9,
+   "coins": 9,
+   "kills": 0,
+   "crates": 93,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240229,
+   "score": 7,
+   "coins": 7,
+   "kills": 0,
+   "crates": 90,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240230,
+   "score": 3,
+   "coins": 3,
+   "kills": 0,
+   "crates": 40,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240231,
+   "score": 9,
+   "coins": 9,
+   "kills": 0,
+   "crates": 106,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240232,
+   "score": 5,
+   "coins": 5,
+   "kills": 0,
+   "crates": 68,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240233,
+   "score": 2,
+   "coins": 2,
+   "kills": 0,
+   "crates": 31,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240234,
+   "score": 5,
+   "coins": 5,
+   "kills": 0,
+   "crates": 80,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240235,
+   "score": 9,
+   "coins": 9,
+   "kills": 0,
+   "crates": 104,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240236,
+   "score": 4,
+   "coins": 4,
+   "kills": 0,
+   "crates": 65,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240237,
+   "score": 7,
+   "coins": 7,
+   "kills": 0,
+   "crates": 85,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240238,
+   "score": 9,
+   "coins": 9,
+   "kills": 0,
+   "crates": 113,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240239,
+   "score": 5,
+   "coins": 5,
+   "kills": 0,
+   "crates": 54,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240240,
+   "score": 2,
+   "coins": 2,
+   "kills": 0,
+   "crates": 29,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240241,
+   "score": 4,
+   "coins": 4,
+   "kills": 0,
+   "crates": 41,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240242,
+   "score": 6,
+   "coins": 6,
+   "kills": 0,
+   "crates": 87,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240243,
+   "score": 5,
+   "coins": 5,
+   "kills": 0,
+   "crates": 82,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240244,
+   "score": 9,
+   "coins": 9,
+   "kills": 0,
+   "crates": 103,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240245,
+   "score": 7,
+   "coins": 7,
+   "kills": 0,
+   "crates": 82,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240246,
+   "score": 6,
+   "coins": 6,
+   "kills": 0,
+   "crates": 73,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240247,
+   "score": 4,
+   "coins": 4,
+   "kills": 0,
+   "crates": 26,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240248,
+   "score": 8,
+   "coins": 8,
+   "kills": 0,
+   "crates": 94,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240249,
+   "score": 2,
+   "coins": 2,
+   "kills": 0,
+   "crates": 19,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240250,
+   "score": 6,
+   "coins": 6,
+   "kills": 0,
+   "crates": 82,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240251,
+   "score": 4,
+   "coins": 4,
+   "kills": 0,
+   "crates": 53,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240252,
+   "score": 7,
+   "coins": 7,
+   "kills": 0,
+   "crates": 96,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240253,
+   "score": 8,
+   "coins": 8,
+   "kills": 0,
+   "crates": 94,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240254,
+   "score": 8,
+   "coins": 8,
+   "kills": 0,
+   "crates": 96,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240255,
+   "score": 8,
+   "coins": 8,
+   "kills": 0,
+   "crates": 92,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240256,
+   "score": 1,
+   "coins": 1,
+   "kills": 0,
+   "crates": 30,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240257,
+   "score": 6,
+   "coins": 6,
+   "kills": 0,
+   "crates": 77,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240258,
+   "score": 2,
+   "coins": 2,
+   "kills": 0,
+   "crates": 32,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240259,
+   "score": 8,
+   "coins": 8,
+   "kills": 0,
+   "crates": 86,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240260,
+   "score": 6,
+   "coins": 6,
+   "kills": 0,
+   "crates": 66,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240261,
+   "score": 3,
+   "coins": 3,
+   "kills": 0,
+   "crates": 52,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240262,
+   "score": 2,
+   "coins": 2,
+   "kills": 0,
+   "crates": 75,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240263,
+   "score": 8,
+   "coins": 8,
+   "kills": 0,
+   "crates": 101,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240264,
+   "score": 3,
+   "coins": 3,
+   "kills": 0,
+   "crates": 35,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    1,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240265,
+   "score": 8,
+   "coins": 8,
+   "kills": 0,
+   "crates": 73,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240266,
+   "score": 9,
+   "coins": 9,
+   "kills": 0,
+   "crates": 109,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240267,
+   "score": 4,
+   "coins": 4,
+   "kills": 0,
+   "crates": 82,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240268,
+   "score": 5,
+   "coins": 5,
+   "kills": 0,
+   "crates": 64,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240269,
+   "score": 9,
+   "coins": 9,
+   "kills": 0,
+   "crates": 122,
+   "steps": 396,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240270,
+   "score": 6,
+   "coins": 6,
+   "kills": 0,
+   "crates": 83,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240271,
+   "score": 7,
+   "coins": 7,
+   "kills": 0,
+   "crates": 90,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240272,
+   "score": 9,
+   "coins": 9,
+   "kills": 0,
+   "crates": 91,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240273,
+   "score": 6,
+   "coins": 6,
+   "kills": 0,
+   "crates": 83,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240274,
+   "score": 6,
+   "coins": 6,
+   "kills": 0,
+   "crates": 54,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240275,
+   "score": 6,
+   "coins": 6,
+   "kills": 0,
+   "crates": 49,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240276,
+   "score": 8,
+   "coins": 8,
+   "kills": 0,
+   "crates": 87,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240277,
+   "score": 5,
+   "coins": 5,
+   "kills": 0,
+   "crates": 76,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240278,
+   "score": 7,
+   "coins": 7,
+   "kills": 0,
+   "crates": 74,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240279,
+   "score": 2,
+   "coins": 2,
+   "kills": 0,
+   "crates": 22,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240280,
+   "score": 9,
+   "coins": 9,
+   "kills": 0,
+   "crates": 109,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240281,
+   "score": 4,
+   "coins": 4,
+   "kills": 0,
+   "crates": 49,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240282,
+   "score": 5,
+   "coins": 5,
+   "kills": 0,
+   "crates": 73,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240283,
+   "score": 5,
+   "coins": 5,
+   "kills": 0,
+   "crates": 66,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240284,
+   "score": 4,
+   "coins": 4,
+   "kills": 0,
+   "crates": 69,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240285,
+   "score": 7,
+   "coins": 7,
+   "kills": 0,
+   "crates": 88,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240286,
+   "score": 3,
+   "coins": 3,
+   "kills": 0,
+   "crates": 64,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240287,
+   "score": 9,
+   "coins": 9,
+   "kills": 0,
+   "crates": 106,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240288,
+   "score": 7,
+   "coins": 7,
+   "kills": 0,
+   "crates": 91,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240289,
+   "score": 2,
+   "coins": 2,
+   "kills": 0,
+   "crates": 34,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240290,
+   "score": 9,
+   "coins": 9,
+   "kills": 0,
+   "crates": 96,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240291,
+   "score": 9,
+   "coins": 9,
+   "kills": 0,
+   "crates": 109,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240292,
+   "score": 9,
+   "coins": 9,
+   "kills": 0,
+   "crates": 111,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240293,
+   "score": 8,
+   "coins": 8,
+   "kills": 0,
+   "crates": 101,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240294,
+   "score": 9,
+   "coins": 9,
+   "kills": 0,
+   "crates": 100,
+   "steps": 379,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240295,
+   "score": 1,
+   "coins": 1,
+   "kills": 0,
+   "crates": 23,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240296,
+   "score": 6,
+   "coins": 6,
+   "kills": 0,
+   "crates": 95,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240297,
+   "score": 8,
+   "coins": 8,
+   "kills": 0,
+   "crates": 104,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240298,
+   "score": 9,
+   "coins": 9,
+   "kills": 0,
+   "crates": 112,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240299,
+   "score": 6,
+   "coins": 6,
+   "kills": 0,
+   "crates": 77,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "seed": 20240300,
+   "score": 4,
+   "coins": 4,
+   "kills": 0,
+   "crates": 86,
+   "steps": 400,
+   "suicide": 0.0,
+   "died": 0.0,
+   "invalid": 0,
+   "rank": 1,
+   "won": 1.0,
+   "opponent_scores": [
+    0,
+    0,
+    0
+   ]
+  }
+ ]
+}

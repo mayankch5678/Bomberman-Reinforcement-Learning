@@ -1,0 +1,41 @@
+{
+  "actions": [
+    "UP",
+    "RIGHT",
+    "DOWN",
+    "LEFT",
+    "WAIT",
+    "BOMB"
+  ],
+  "created": "2026-09-18T22:45:43",
+  "feature_version": 7,
+  "final_epsilon": 0.05,
+  "git_commit": "82882cc",
+  "hyperparameters": {
+    "alpha": 0.01,
+    "epsilon_decay": 0.9999,
+    "epsilon_end": 0.05,
+    "epsilon_start": 1.0,
+    "gamma": 0.95
+  },
+  "n_features": 40,
+  "reward_regime": {
+    "invalid_in_blast": -10.0,
+    "killed_opponent": 0.0,
+    "living_cost": -0.1,
+    "offensive_bomb": 0.0,
+    "opponent_nav": [
+      0.0,
+      0.0
+    ],
+    "pointless_bomb": -3.0,
+    "unsafe_bomb": -5.0,
+    "use_bomb_spot_shaping": false,
+    "use_offence": false,
+    "use_stall_penalty": false,
+    "waited": -1.0
+  },
+  "rounds_trained": 40000,
+  "run": "v13_robust_escape",
+  "updated": "2026-09-19T03:01:36"
+}

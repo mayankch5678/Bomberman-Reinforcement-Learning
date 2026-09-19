@@ -1,21 +1,75 @@
 """
 callbacks.py -- always loaded by the framework.
 
-Contains:
-  - the feature extraction (game_state dict  ->  short numeric vector)
-  - the linear Q-model (one weight vector per action)
-  - the action selection (epsilon-greedy during training, greedy otherwise)
+The scikit-learn-free twin of mayank_gbt. Same model, same features, same
+decisions -- but the boosted trees are stored as plain numpy arrays and walked
+by the traversal in q_values() below, so nothing here imports scikit-learn.
+
+Why. mayank_gbt loads its six fitted estimators from a joblib pickle, and a
+pickle is only readable by a library version compatible with the one that wrote
+it. That file records _sklearn_version 1.8.0, and scikit-learn >= 1.9.0 refuses
+it outright with `ModuleNotFoundError: No module named '_loss'`. The failure
+lands inside setup(), so the agent dies before its first step rather than
+playing badly. An unpinned `scikit-learn` in requirements.txt resolves to the
+newest release, which means that crash is the DEFAULT outcome in a freshly
+built environment. Exporting the trees to numpy removes the dependency and the
+pickle together: this agent needs numpy and nothing else, and its model file is
+read with allow_pickle=False, so it cannot execute code on load either.
+
+What the model file holds. analysis/export_gbt_numpy.py flattens all 600 trees
+(100 boosting iterations x 6 actions) into one node table, rewriting each tree's
+child indices from tree-local to global so every action can be walked in a
+single vectorised pass:
+
+    node_feature       int32    which feature this node tests
+    node_threshold     float64  the numerical split point
+    node_left/right    int32    global index of each child
+    node_value         float64  the leaf value (0 in internal nodes)
+    node_is_leaf       uint8    stop here and read node_value
+    node_missing_left  uint8    where a NaN feature goes
+    tree_root          int32    global index of each tree's root
+    tree_action        int32    which action each tree contributes to
+    baseline           float64  per-action baseline prediction
+
+The arithmetic. scikit-learn's HistGradientBoosting applies the learning rate as
+shrinkage when a leaf is finalised during FITTING, not at prediction time, so
+the stored leaf values already carry the factor 0.1 and the prediction is an
+unweighted sum:
+
+    Q(s, a) = baseline[a] + sum over that action's 100 trees of leaf_value
+
+`leaf_scale` is carried in the file (and is 1.0) so that the summation stays
+explicit rather than relying on that fact being remembered. The loss is
+HalfSquaredError, whose link is the identity, so predict() and the raw
+prediction coincide and there is no inverse link to apply. The port is verified
+against the scikit-learn model on real game states by
+analysis/verify_gbt_numpy.py, which requires exact argmax agreement.
+
+Everything below the "Features" heading is a byte-for-byte copy of
+mayank_gbt/callbacks.py: the same 38 slots, the same urgency floor, the same
+escape reasoning.
 """
 
-import json
 import os
+
+# --- thread pinning --------------------------------------------------------
+# No OpenMP runtime is loaded here any more -- the traversal below is pure numpy
+# indexing, and numpy's BLAS is never reached by it. These are kept anyway
+# because they are free, they are inherited by anything else the process loads,
+# and the per-step budget is judged on the tail rather than the mean. They must
+# precede the numpy import to take effect, which is why they sit here.
+os.environ.setdefault('OMP_NUM_THREADS', '1')
+os.environ.setdefault('OPENBLAS_NUM_THREADS', '1')
+os.environ.setdefault('MKL_NUM_THREADS', '1')
+
+import json
 from collections import deque
 
 import numpy as np
 
 import settings as s
 
-# Order matters: the index of an action here is its row in the weight matrix.
+# Order matters: the index of an action here is its column in the Q vector.
 ACTIONS = ['UP', 'RIGHT', 'DOWN', 'LEFT', 'WAIT', 'BOMB']
 
 # How each move changes (x, y). Note: image coordinates, so y grows downwards.
@@ -23,8 +77,8 @@ MOVES = {'UP': (0, -1), 'RIGHT': (1, 0), 'DOWN': (0, 1), 'LEFT': (-1, 0)}
 DIRECTIONS = ['UP', 'RIGHT', 'DOWN', 'LEFT']
 
 # --- feature-set version ---------------------------------------------------
-# Bump this whenever state_to_features() changes what its slots MEAN. A model
-# is only ever loaded back into the feature set it was trained on; the check in
+# Bump this whenever state_to_features() changes what its slots MEAN. A model is
+# only ever loaded back into the feature set it was trained on; the check in
 # setup() refuses anything else rather than silently scoring garbage.
 #   1 -- task 1: bias, walls, coin direction                        (9 features)
 #   2 -- task 2: + danger, neighbour safety, bomb value, crates    (21 features)
@@ -35,52 +89,32 @@ DIRECTIONS = ['UP', 'RIGHT', 'DOWN', 'LEFT']
 #                every step against live opponent positions
 #   6 -- v9:     [10] rescaled -- a ticking bomb is near-maximally    (38 features)
 #                urgent at every timer value, not just the last one
-FEATURE_VERSION = 7
-N_FEATURES = 40         # must match state_to_features() below
+FEATURE_VERSION = 6
+N_FEATURES = 38         # must match state_to_features() below
 
 # --- run layout ------------------------------------------------------------
-# Every training run owns a directory holding its model, its log and its
-# metadata, so a model can never drift apart from the log that produced it:
-#
-#   agent_code/mayank_agent/runs/<run>/model.pt
-#                                     /training_log.csv
-#                                     /meta.json
-#
-# The run name is resolved in exactly one place, resolve_run(), so training,
-# acting and evaluation can never disagree about which model is in play:
-#   an explicit name (evaluate.py --run) > $BOMBERMAN_RUN > no run at all
-#   BOMBERMAN_RUN=v2_crates python main.py play --agents mayank_agent --train 1 ...
-# The weight matrix is a plain float ndarray, so it is stored with np.save and
-# read back with allow_pickle=False -- no object graph, and stable across NumPy
-# versions. np.save appends '.npy' unless the path already ends in it, so the
-# constant carries the extension and every path built from model_path() names
-# the file exactly. callbacks.py, train.py and evaluate.py all go through
-# model_path(), so the three cannot drift apart.
-MODEL_FILE = 'model.npy'
-LOG_FILE = 'training_log.csv'
+# Identical in spirit to mayank_gbt's, but the model is a .npz of plain arrays
+# rather than a .joblib pickle. resolve_run() returning None means "no run": the
+# model sits directly beside this file, which is the tournament-submission
+# layout and therefore the default.
+MODEL_FILE = 'model.npz'
 META_FILE = 'meta.json'
 RUNS_DIR = 'runs'
 RUN_ENV_VAR = 'BOMBERMAN_RUN'
 
+# The arrays export_gbt_numpy.py writes, and which q_values() needs to exist.
+REQUIRED_ARRAYS = ('node_feature', 'node_threshold', 'node_left', 'node_right',
+                   'node_value', 'node_is_leaf', 'node_missing_left',
+                   'tree_root', 'tree_action', 'baseline', 'leaf_scale',
+                   'max_depth', 'n_actions', 'n_features', 'feature_version')
+
 
 def resolve_run(run=None):
-    """
-    The single source of truth for which run is active.
-
-    Precedence: an explicitly passed name (e.g. evaluate.py --run) beats the
-    BOMBERMAN_RUN environment variable, which beats no run at all.
-
-    None means "no run": the model sits directly beside this file, which is the
-    tournament-submission layout -- one agent directory holding callbacks.py,
-    train.py and model.npy, with no runs/ tree. That is deliberately the
-    DEFAULT, so a submitted agent loads its own weights with nothing set in the
-    environment.
-    """
+    """The single source of truth for which run is active."""
     return run or os.environ.get(RUN_ENV_VAR) or None
 
 
 def run_name(run=None):
-    """Which run this process is reading from / writing to."""
     return resolve_run(run)
 
 
@@ -91,10 +125,7 @@ def run_dir(name=None):
 
 
 def announce_run(source, name=None):
-    """
-    One-line startup banner. Every entry point prints this, so a mismatch
-    between training and evaluation is visible in the first line of output.
-    """
+    """One-line startup banner, printed by every entry point."""
     name = resolve_run(name)
     shown = name if name is not None else '<none: agent directory>'
     print(f"[{source}] run {shown!r} -> {model_path(name)}", flush=True)
@@ -103,10 +134,6 @@ def announce_run(source, name=None):
 
 def model_path(name=None):
     return os.path.join(run_dir(name), MODEL_FILE)
-
-
-def log_path(name=None):
-    return os.path.join(run_dir(name), LOG_FILE)
 
 
 def meta_path(name=None):
@@ -122,31 +149,55 @@ def read_meta(name=None):
         return {}
 
 
-def write_meta(meta, name=None):
-    os.makedirs(run_dir(name), exist_ok=True)
-    with open(meta_path(name), 'w') as f:
-        json.dump(meta, f, indent=2, sort_keys=True)
+def load_model(path):
+    """
+    Read the exported arrays into a plain dict of numpy arrays.
+
+    allow_pickle=False is the point: this file can only ever be arrays, never a
+    pickled object graph, so loading it cannot execute anything. The arrays are
+    materialised out of the lazy NpzFile here so that the per-step traversal
+    never touches the zip container again, and the index arrays are cast to
+    intp once so that fancy indexing in q_values() does no per-call conversion.
+    """
+    with np.load(path, allow_pickle=False) as z:
+        model = {k: z[k] for k in z.files}
+    for key in REQUIRED_ARRAYS:
+        if key not in model:
+            raise ValueError(f"{path} is missing the {key!r} array -- "
+                             f"re-export it with analysis/export_gbt_numpy.py")
+    for key in ('node_left', 'node_right', 'node_feature', 'tree_root'):
+        model[key] = model[key].astype(np.intp)
+    model['tree_action'] = model['tree_action'].astype(np.intp)
+    model['node_is_leaf'] = model['node_is_leaf'].astype(bool)
+    model['node_missing_left'] = model['node_missing_left'].astype(bool)
+    return model
 
 
-def check_compatible(weights, meta, name):
-    """Refuse a model that was not trained against the current feature set."""
-    expected = (len(ACTIONS), N_FEATURES)
-    trained_version = meta.get('feature_version')
-
-    if weights.shape != expected:
+def check_compatible(model, name):
+    """Refuse a model that was not exported from the current feature set."""
+    n_actions = int(model['n_actions'])
+    if n_actions != len(ACTIONS):
         raise ValueError(
-            f"run {name!r} holds weights of shape {weights.shape}, but feature "
-            f"version {FEATURE_VERSION} needs {expected}. That model was trained "
-            f"against feature version {trained_version} -- evaluate it from its "
-            f"archived results, or retrain it under a new run name."
-        )
-    if trained_version is not None and trained_version != FEATURE_VERSION:
+            f"run {name!r} holds {n_actions} action-models, but there are "
+            f"{len(ACTIONS)} actions. That file was not written by this agent.")
+    trained_features = int(model['n_features'])
+    if trained_features != N_FEATURES:
         raise ValueError(
-            f"run {name!r} was trained against feature version {trained_version}, "
-            f"but this code is version {FEATURE_VERSION}. The slot count happens to "
-            f"match, which makes this the dangerous case: the weights would be "
-            f"silently misinterpreted. Retrain under a new run name."
-        )
+            f"run {name!r} was fitted on {trained_features} features, but "
+            f"feature version {FEATURE_VERSION} produces {N_FEATURES}. "
+            f"Re-export from a model trained against this feature set.")
+    trained_version = int(model['feature_version'])
+    if trained_version != FEATURE_VERSION:
+        raise ValueError(
+            f"run {name!r} was trained against feature version "
+            f"{trained_version}, but this code is version {FEATURE_VERSION}. "
+            f"The feature count happens to match, which makes this the "
+            f"dangerous case: the inputs would be silently misinterpreted.")
+    if 'actions' in model and list(model['actions']) != ACTIONS:
+        raise ValueError(
+            f"run {name!r} was exported with action order "
+            f"{list(model['actions'])}, but this code uses {ACTIONS}.")
+
 
 # Timing, derived from the rules in environment.py / items.py:
 #   A bomb observed with timer t detonates at the END of the step in which it
@@ -197,41 +248,6 @@ IDX_OPP_DIST = 29     # [29:32] one-hot bucket of the BFS distance to that oppon
 IDX_BOMB_HITS_OPP = 32   # would a bomb dropped here catch an opponent where it stands?
 IDX_ESCAPE_DIR = 33   # [33:37] does stepping UP/RIGHT/DOWN/LEFT continue a live escape?
 IDX_TRAPPED = 37      # in a blast radius AND at least one escape direction exists
-IDX_BOMB_ESCAPE_ROBUST = 38  # [16], but assuming nearby opponents close in
-IDX_N_ESCAPE_DIRS = 39       # how many of [33:37] are open, 0..4
-
-# --- robust escape (version 7) ---------------------------------------------
-# [16] asks whether a bomb dropped here would leave an escape, against the board
-# frozen as it is. The v9 forensics showed that is the wrong question: [16] was
-# set at 73/73 self-kills and an independent search agreed with it every time,
-# so the escape was real when the bomb was dropped and stopped being real
-# afterwards. 61 of those 73 deaths contained a refused move, 35 of them into a
-# tile an opponent stepped onto inside the very step the agent moved -- an event
-# no feature computed from the observed state can see.
-#
-# The fix is not a better view of the present but a pessimistic view of what the
-# opponents do next: assume every opponent close enough to interfere walks at
-# the agent, and since we cannot know which way, treat everything it could stand
-# on as blocked. [38] is [16] re-asked against that closure.
-#
-# Both constants were picked by measuring the rule against the 6877 bombs
-# v9_urgency actually dropped over the 200 forensics rounds, scored on how many
-# of its 73 fatal bombs the rule would have refused:
-#
-#   radius 3, steps 1 :   15 bombs flagged (0.2%),   5 of 73 deaths (6.8%)
-#   radius 3, steps 2 :   76 bombs flagged (1.1%),   8 of 73 deaths (11.0%)
-#   radius 5, steps 2 :   95 bombs flagged (1.4%),  13 of 73 deaths (17.8%)
-#   radius 5, steps 3 :  563 bombs flagged (8.2%),  25 of 73 deaths (34.2%)
-#   radius 8, steps 3 :  566 bombs flagged (8.2%),  25 of 73 deaths (34.2%)
-#
-# The radius saturates -- an opponent eight tiles away cannot reach the corridor
-# in time, so widening past 5 changes nothing -- while the number of steps it is
-# granted is what actually bites. One step is far too generous: it makes [38] a
-# 99.8% copy of [16] and leaves the reward attached to it nothing to fire on.
-# Three is the setting where the feature separates a bomb that survives a
-# committed opponent from one that only survives a stationary one.
-ROBUST_OPP_RADIUS = 5   # opponents this many steps away or closer are assumed to close in
-ROBUST_OPP_STEPS = 3    # how many moves each of them is assumed to get
 
 # [11:15] answers "is that tile survivable", which is computed once, before the
 # bomb is dropped, and never revisited. [33:37] is the same question asked from
@@ -260,27 +276,19 @@ def setup(self):
     self.run = name
     path = model_path(name)
 
-    if self.train and not os.path.isfile(path):
-        # Fresh start: small random weights, shape (n_actions, n_features)
-        self.logger.info(f"Run {name!r}: no model yet -- starting from scratch.")
-        os.makedirs(run_dir(name), exist_ok=True)
-        self.weights = np.random.rand(len(ACTIONS), N_FEATURES) * 0.01
-    else:
-        if not os.path.isfile(path):
-            legacy = os.path.join(run_dir(name), 'model.pt')
-            hint = (" That run still has the old pickled model.pt -- convert it "
-                    "with analysis/convert_weights.py."
-                    if os.path.isfile(legacy) else "")
-            where = repr(name) if name is not None else 'the agent directory'
-            raise FileNotFoundError(
-                f"no model for {where} at {path}. Set {RUN_ENV_VAR} to an "
-                f"existing run, or train one first.{hint}"
-            )
-        self.logger.info(f"Run {name!r}: loading model from {path}.")
-        # allow_pickle=False is the point: a weights file can only ever be a
-        # plain array, never a pickled object graph.
-        self.weights = np.load(path, allow_pickle=False)
-        check_compatible(self.weights, read_meta(name), name)
+    if not os.path.isfile(path):
+        where = repr(name) if name is not None else 'the agent directory'
+        raise FileNotFoundError(
+            f"no model for {where} at {path}. Export one with "
+            f"analysis/export_gbt_numpy.py, or set {RUN_ENV_VAR} to a run "
+            f"that has one.")
+    self.logger.info(f"Run {name!r}: loading model from {path}.")
+    self.model = load_model(path)
+    check_compatible(self.model, name)
+    self.logger.info(
+        f"Loaded {len(self.model['tree_root'])} trees over "
+        f"{len(self.model['node_value'])} nodes, max depth "
+        f"{int(self.model['max_depth'])}.")
 
 
 # --------------------------------------------------------------------------
@@ -291,12 +299,9 @@ def explorable_actions(features):
     """
     The actions exploration is allowed to sample, given the current features.
 
-    Random exploration is what teaches the bomb features, but unrestricted
-    random bombing is self-defeating: the escape that follows is random too, so
-    almost every exploratory bomb ends in KILLED_SELF (-50) and the BOMB row
-    learns that bombing is fatal before it can learn that bombing pays. Masking
-    the two provably-fatal choices removes that bias without telling the agent
-    which of the remaining actions is good.
+    Kept so that this agent's random behaviour is identical to mayank_gbt's and
+    mayank_agent's. It is only ever reached with self.train set, which this
+    frozen export never is during a tournament game.
 
     Excluded:
       - BOMB, when no escape route would remain (feature [16] == 0)
@@ -312,19 +317,67 @@ def explorable_actions(features):
     return allowed
 
 
+def q_values(model, features):
+    """
+    Q(s, .) for all six actions, by walking every tree at once.
+
+    This is scikit-learn's TreePredictor traversal, vectorised. Rather than
+    descending 600 trees one at a time in Python, it keeps a cursor per tree in
+    one array and advances all of them together, so the work per level is a
+    handful of numpy gathers over 600 elements and the loop runs at most
+    max_depth times. Trees that have already reached a leaf are frozen in place
+    by the `active` mask and simply ride along.
+
+    The branch rule matches scikit-learn exactly, including the NaN case:
+        leaf            -> take node_value
+        NaN feature     -> node_missing_left decides
+        otherwise       -> left if value <= threshold, else right
+
+    The per-action sum is a bincount over tree_action, which adds each tree's
+    leaf value into its own action's bucket in one pass.
+    """
+    x = np.asarray(features, dtype=np.float64)
+    node = model['tree_root'].copy()
+    is_leaf = model['node_is_leaf']
+
+    for _ in range(int(model['max_depth'])):
+        active = ~is_leaf[node]
+        if not active.any():
+            break
+        here = node[active]
+        value = x[model['node_feature'][here]]
+        threshold = model['node_threshold'][here]
+        go_left = np.where(np.isnan(value),
+                           model['node_missing_left'][here],
+                           value <= threshold)
+        node[active] = np.where(go_left,
+                                model['node_left'][here],
+                                model['node_right'][here])
+    else:
+        if not is_leaf[node].all():
+            # Unreachable unless the export is inconsistent with max_depth; a
+            # silently truncated traversal would return internal-node values,
+            # which are zero, so fail loudly instead.
+            raise RuntimeError("tree traversal did not reach a leaf in "
+                               f"{int(model['max_depth'])} levels")
+
+    leaves = model['node_value'][node] * model['leaf_scale']
+    return model['baseline'] + np.bincount(model['tree_action'], weights=leaves,
+                                           minlength=int(model['n_actions']))
+
+
 def act(self, game_state: dict) -> str:
     """Called once per step. Must return one of ACTIONS."""
     features = state_to_features(game_state)
 
     # Exploration: with probability epsilon, act randomly -- uniformly over the
-    # actions that are not already known to be fatal.
-    if self.train and np.random.rand() < self.epsilon:
+    # actions that are not already known to be fatal. A frozen export is never
+    # in training mode, so this is here only to keep the three agents' act()
+    # bodies comparable.
+    if getattr(self, 'train', False) and np.random.rand() < getattr(self, 'epsilon', 0.0):
         return str(np.random.choice(explorable_actions(features)))
 
-    # Greedy selection stays unrestricted: the mask shapes what the agent
-    # TRIES while learning, never what it is allowed to conclude.
-    q_values = self.weights @ features       # one Q-value per action
-    return ACTIONS[int(np.argmax(q_values))]
+    return ACTIONS[int(np.argmax(q_values(self.model, features)))]
 
 
 # --------------------------------------------------------------------------
@@ -356,11 +409,6 @@ def state_to_features(game_state: dict) -> np.ndarray:
                escape from the danger on the board, given where opponents stand
                this step? Recomputed every step, so it refreshes after a refused move.
       [37]     am I inside a blast radius AND is at least one escape direction open?
-      [38]     would dropping a bomb here still leave me an escape if every
-               opponent within ROBUST_OPP_RADIUS steps spent the next
-               ROBUST_OPP_STEPS moves walking at me?
-      [39]     how many of the four directions in [33:37] are open (0..4) -- the
-               difference between one narrow exit and three
     """
     if game_state is None:
         return np.zeros(N_FEATURES)
@@ -434,13 +482,6 @@ def state_to_features(game_state: dict) -> np.ndarray:
         blast_set = set(blast)
         features[IDX_BOMB_HITS_OPP] = 1.0 if any(o in blast_set for o in others) else 0.0
 
-        # The same question as [16], asked of a board where the opponents that
-        # can reach me have already moved. See ROBUST_OPP_RADIUS above.
-        features[IDX_BOMB_ESCAPE_ROBUST] = 1.0 if survivable(
-            field, (x, y), hypothetical, explosion_map,
-            bomb_tiles | {(x, y)}, hyp_horizon, start_move=1,
-            occupied=threat_closure(field, (x, y), others)) else 0.0
-
     # --- direction to nearest crate, only if no coin is reachable ----------
     if step is None:
         crate_step = bfs_next_step(field, (x, y), crate_approach_tiles(field))
@@ -474,10 +515,6 @@ def state_to_features(game_state: dict) -> np.ndarray:
     # In danger, but not yet cornered: the state where walking the right way is
     # the whole game. Distinct from [9], which says only that I am in a blast.
     features[IDX_TRAPPED] = 1.0 if (features[IDX_DANGER] and any(escape)) else 0.0
-    # How wide is the way out? [37] only says "at least one". A single exit with
-    # an opponent walking at it is the state the v9 self-kills kept dying in, and
-    # it is indistinguishable from a three-way junction without this count.
-    features[IDX_N_ESCAPE_DIRS] = float(sum(escape))
 
     # --- where is the nearest opponent? ------------------------------------
     # Both slots are read off one BFS, so the direction and the distance can
@@ -585,49 +622,6 @@ def survivable(field, start, danger, explosion_map, bomb_tiles, horizon, start_m
                 frontier.append((nxt, nd))
 
     return False
-
-
-def tiles_within(field, start, radius):
-    """Free tiles reachable from `start` in at most `radius` steps."""
-    seen = {start}
-    frontier = deque([(start, 0)])
-    while frontier:
-        (cx, cy), d = frontier.popleft()
-        if d >= radius:
-            continue
-        for nxt in ((cx, cy - 1), (cx + 1, cy), (cx, cy + 1), (cx - 1, cy)):
-            nx, ny = nxt
-            if not (0 <= nx < field.shape[0] and 0 <= ny < field.shape[1]):
-                continue
-            if field[nx, ny] != 0 or nxt in seen:
-                continue
-            seen.add(nxt)
-            frontier.append((nxt, d + 1))
-    return seen
-
-
-def threat_closure(field, pos, others, radius=ROBUST_OPP_RADIUS,
-                   steps=ROBUST_OPP_STEPS):
-    """
-    Tiles to treat as blocked when asking whether an escape is ROBUST.
-
-    Every opponent within `radius` steps of `pos` is assumed to spend the next
-    `steps` moves walking at the agent. Which way it goes is unknowable at
-    decision time -- the engine resolves a step's agents in a random
-    permutation, so an opponent can take a tile between the agent choosing and
-    the agent moving -- so every tile it could stand on is blocked at once.
-
-    Opponents further than `radius` are left alone: they cannot reach the
-    corridor inside the window a bomb allows, and blocking them as well marks
-    nearly every bomb unsafe without catching any more deaths.
-    """
-    reach = tiles_within(field, tuple(pos), radius)
-    blocked = set()
-    for o in others:
-        o = tuple(o)
-        if o in reach:
-            blocked |= tiles_within(field, o, steps)
-    return blocked
 
 
 def escape_directions(field, pos, danger, explosion_map, bomb_tiles, horizon, occupied=()):

@@ -18,7 +18,8 @@ from datetime import datetime
 import numpy as np
 
 import events as e
-from .callbacks import (ACTIONS, FEATURE_VERSION, IDX_BOMB_ESCAPE, IDX_BOMB_HITS_OPP,
+from .callbacks import (ACTIONS, FEATURE_VERSION, IDX_BOMB_CRATE, IDX_BOMB_ESCAPE,
+                        IDX_BOMB_ESCAPE_ROBUST, IDX_BOMB_HITS_OPP,
                         IDX_DANGER, N_FEATURES, announce_run, blast_coords, bfs_distance,
                         crate_approach_tiles, log_path, model_path, other_positions,
                         read_meta, run_dir, run_name, state_to_features, viable_bomb_tiles,
@@ -99,6 +100,15 @@ STALLED = 'STALLED'                        # waited while in no danger at all
 INVALID_WHILE_IN_BLAST = 'INVALID_WHILE_IN_BLAST'
 
 # --- offensive shaping events ------------------------------------------------
+# --- bomb discipline (v13) ---------------------------------------------------
+# A bomb that covers neither a crate nor an opponent buys nothing and costs the
+# agent its only bomb plus four steps of running. USELESS_BOMB already covers
+# the no-crate half; this is the stricter reading that also requires no
+# opponent, so the two stack on a bomb that achieves nothing at all.
+POINTLESS_BOMB = 'POINTLESS_BOMB'          # [15] = 0 AND [32] = 0
+# A bomb whose escape does not survive one opponent move -- feature [38].
+UNSAFE_BOMB = 'UNSAFE_BOMB'                # [38] = 0
+
 OFFENSIVE_BOMB = 'OFFENSIVE_BOMB'          # bomb dropped onto an opponent, with an escape
 MOVED_TOWARD_OPPONENT = 'MOVED_TOWARD_OPPONENT'
 MOVED_AWAY_FROM_OPPONENT = 'MOVED_AWAY_FROM_OPPONENT'
@@ -156,6 +166,8 @@ def setup_training(self):
         },
         'reward_regime': {
             'invalid_in_blast': INVALID_IN_BLAST_PENALTY,
+            'pointless_bomb': -3.0,
+            'unsafe_bomb': -5.0,
             'use_offence': USE_OFFENCE,
             'killed_opponent': 30.0 if USE_OFFENCE else 0.0,
             'offensive_bomb': 8.0 if USE_OFFENCE else 0.0,
@@ -395,6 +407,14 @@ def auxiliary_events(old_state, self_action, new_state, events):
         hits_crate = any(old_state['field'][t] == 1 for t in blast)
         aux.append(BOMB_NEXT_TO_CRATE if hits_crate else USELESS_BOMB)
 
+        # Read off the same slots the policy sees, so the reward and the
+        # features cannot disagree about what this bomb was.
+        phi = state_to_features(old_state)
+        if not phi[IDX_BOMB_CRATE] and not phi[IDX_BOMB_HITS_OPP]:
+            aux.append(POINTLESS_BOMB)
+        if not phi[IDX_BOMB_ESCAPE_ROBUST]:
+            aux.append(UNSAFE_BOMB)
+
     return aux
 
 
@@ -460,6 +480,18 @@ def reward_from_events(self, events) -> float:
 
         BOMB_NEXT_TO_CRATE: 2.0,     # immediate credit for a decision that pays off later
         USELESS_BOMB: -2.0,
+
+        # Stacks on USELESS_BOMB: a bomb that hits nothing at all costs -5 in
+        # total, a bomb that merely misses a crate still only -2.
+        POINTLESS_BOMB: -3.0,
+        # The new feature's own price tag. Note where this lands in a LINEAR
+        # model: the update is w_a += alpha * td * phi, so a penalty paid when
+        # phi[38] = 0 contributes exactly nothing to w_BOMB[38]. It is absorbed
+        # by the bias and the other active slots, i.e. it teaches "bomb less"
+        # globally. What separates a robust bomb from a fragile one in the Q
+        # value is w_BOMB[38] itself, which can only grow from the bombs that
+        # DO have [38] = 1 and go well. Both halves are measured after training.
+        UNSAFE_BOMB: -5.0,
 
         # --- costs ----------------------------------------------------------
         # With USE_STALL_PENALTY on, waiting itself is free -- sitting out a
